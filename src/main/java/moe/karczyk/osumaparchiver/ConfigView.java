@@ -36,7 +36,7 @@ public class ConfigView {
     public void bind(ConfigViewModel configViewModel) {
         this.configViewModel = configViewModel;
         mapDirectoryTextField.textProperty().bind(configViewModel.getMapsDirectory());
-        mapDirectoryErrorLabel.textProperty().bind(configViewModel.getMapsDirectoryErrorMsg());
+//        mapDirectoryErrorLabel.textProperty().bind(configViewModel.getMapsDirectoryErrorMsg());
     }
 
 
