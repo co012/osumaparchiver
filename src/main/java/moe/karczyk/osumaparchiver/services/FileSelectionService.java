@@ -1,4 +1,4 @@
-package moe.karczyk.osumaparchiver;
+package moe.karczyk.osumaparchiver.services;
 
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;

@@ -1,11 +1,10 @@
 package moe.karczyk.osumaparchiver;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.stage.Stage;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
+import moe.karczyk.osumaparchiver.services.FileSelectionService;
+import moe.karczyk.osumaparchiver.services.OsuStuffValidationService;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;

@@ -1,4 +1,4 @@
-package moe.karczyk.osumaparchiver;
+package moe.karczyk.osumaparchiver.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
