@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ConfigView">
+   <top>
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" VBox.vgrow="NEVER">
+         <children>
+            <Label text="Osu maps directory: ">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="mapDirectoryTextField" />
+            <Button mnemonicParsing="false" onAction="#onBrowseButtonAction" text="Browse...">
+               <HBox.margin>
+                  <Insets left="7.0" />
+               </HBox.margin>
+            </Button>
+         </children></HBox>
+      <Label fx:id="mapDirectoryErrorLabel">
+         <VBox.margin>
+            <Insets top="-10.0" />
+         </VBox.margin>
+      </Label>
+      <Separator prefWidth="200.0" />
+   </top>
+   <center>
+      <TableView fx:id="mapsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+      </TableView>
+   </center>
+</BorderPane>
