@@ -1,3 +1,6 @@
 spring:
   application:
     name: osumaparchiver
+  h2:
+    console:
+      enabled: true

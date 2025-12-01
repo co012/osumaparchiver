@@ -2,10 +2,13 @@ package moe.karczyk.osumaparchiver.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
+import moe.karczyk.osumaparchiver.BeatmapRepository;
+import moe.karczyk.osumaparchiver.BeatmapSetRepository;
+import moe.karczyk.osumaparchiver.models.Beatmap;
+import moe.karczyk.osumaparchiver.models.BeatmapSet;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -13,20 +16,31 @@ import java.util.ArrayList;
 public class MapsService {
 
     private final FileAccessService fileAccessService;
+    private final BeatmapSetRepository beatmapSetRepository;
+    private final BeatmapRepository beatmapRepository;
 
 
     public void loadMapsFrom(Path mapsPath) {
-        var maps = new ArrayList<>();
         var mapDirs = fileAccessService.getDirectoriesInDirectory(mapsPath);
         for (Path mapDir : mapDirs) {
             var mapFiles = fileAccessService.getFilesInDirectory(mapDir).stream()
                     .filter(p -> p.toString().endsWith(".osu"))
                     .map(this::parseMapFile)
+                    .map(name -> Beatmap.builder().title(name).build())
                     .toList();
-            maps.add(mapFiles);
+            beatmapRepository.saveAll(mapFiles);
+
+            var beatmapSet =  BeatmapSet.builder()
+                    .beatmaps(mapFiles)
+                    .fullDirectoryPath(mapDir.toAbsolutePath().toString())
+                    .directoryName(mapDir.getFileName().toString())
+                    .build();
+            beatmapSetRepository.save(beatmapSet);
         }
 
-        log.info(maps);
+
+
+
     }
 
     private String parseMapFile(Path mapFile) {
