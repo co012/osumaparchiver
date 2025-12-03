@@ -6,12 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class Beatmap {
 
     @Id
@@ -20,12 +22,13 @@ public class Beatmap {
 
     private String title;
     private String titleOriginal;
-    private String songArtist;
-    private String songArtistOriginal;
-    private String mapCreator;
-    private String mapVersion;
+    private String artist;
+    private String artistOriginal;
+    private String creator;
+    private String version;
 
-    private String songFileName;
-    private String backgroundFileName;
+    private String audioFilename;
+    private Long previewTime;
+    private String backgroundFilename;
 
 }

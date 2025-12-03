@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import moe.karczyk.osumaparchiver.services.FileSelectionService;
-import moe.karczyk.osumaparchiver.services.MapsService;
+import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.services.OsuStuffValidationService;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ import java.nio.file.Path;
 public class ConfigViewModel {
     private final FileSelectionService fileSelectionService;
     private final OsuStuffValidationService osuStuffValidationService;
-    private final MapsService mapsService;
+    private final BeatmapSetService beatmapSetService;
 
     @Delegate
     private final ConfigPresentationModel configPresentationModel = new ConfigPresentationModel();
@@ -34,7 +34,7 @@ public class ConfigViewModel {
         getMapsDirectory().setValue(mapsPath.toAbsolutePath().toString());
 
         if (result.success()) {
-            mapsService.loadMapsFrom(mapsPath);
+            beatmapSetService.loadMapsFrom(mapsPath);
         }
     }
 }

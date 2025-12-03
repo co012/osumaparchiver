@@ -1,6 +1,6 @@
-package moe.karczyk.osumaparchiver
+package moe.karczyk.osumaparchiver.services
 
-import moe.karczyk.osumaparchiver.services.FileAccessService
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
