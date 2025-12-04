@@ -5,6 +5,7 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -54,7 +55,10 @@ public class OsuStuffValidationService {
                 }
             }
 
-        } catch (IOException e) {
+        } catch (AccessDeniedException e) {
+            log.trace("Permission do access %s is denied".formatted(path.toString()));
+        }
+        catch (IOException e) {
             log.warn("Error while reading maps directory", e);
         }
 

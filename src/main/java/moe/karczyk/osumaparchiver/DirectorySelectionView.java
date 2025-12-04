@@ -1,0 +1,78 @@
+package moe.karczyk.osumaparchiver;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+import lombok.Getter;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class DirectorySelectionView implements Initializable {
+
+    @FXML
+    @Getter
+    private Parent root;
+    @FXML
+    private Label infoLabel;
+    @FXML
+    private TextField pathTextField;
+    @FXML
+    private Button loadButton;
+
+    private DirectorySelectionViewModel viewModel;
+    private final DirectoryChooser directoryChooser = new DirectoryChooser();
+
+    public static DirectorySelectionView load() {
+        FXMLLoader loader = new FXMLLoader(DirectorySelectionView.class.getResource("/fxml/directory_selection_view.fxml"));
+        DirectorySelectionView view;
+        try {
+            loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        view = loader.getController();
+        return view;
+    }
+
+    public void bind(DirectorySelectionViewModel viewModel) {
+        this.viewModel = viewModel;
+        viewModel.songsDirPath.bindBidirectional(pathTextField.textProperty());
+        loadButton.disableProperty().bind(viewModel.isPathValid.not());
+        infoLabel.textProperty().bind(viewModel.infoText);
+    }
+
+    @FXML
+    private void onBrowseButtonAction() {
+        var currentStage = (Stage) root.getScene().getWindow();
+        File selected = directoryChooser.showDialog(currentStage);
+        if (selected == null) {
+            return;
+        }
+        viewModel.processSelectedPath(selected);
+    }
+
+    @FXML
+    private void onPathChanged() {
+        viewModel.validateSelectedPath(pathTextField.getText());
+    }
+
+    @FXML
+    private void onLoadButtonAction(ActionEvent event) {
+
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        directoryChooser.setTitle("Select Directory");
+    }
+}

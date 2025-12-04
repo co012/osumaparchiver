@@ -1,7 +1,6 @@
 package moe.karczyk.osumaparchiver;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -25,11 +24,17 @@ public class JavaFxLauncher extends Application {
         StageRepository stageRepository = applicationContext.getBean(StageRepository.class);
         stageRepository.setMainStage(stage);
 
-        var configView = ConfigView.load();
-        ConfigViewModel configViewModel = applicationContext.getBean(ConfigViewModel.class);
-        configView.bind(configViewModel);
-        stage.setScene(new Scene(configView.root));
+        var dirSelectionView = DirectorySelectionView.load();
+        DirectorySelectionViewModel directorySelectionViewModel = applicationContext.getBean(DirectorySelectionViewModel.class);
+        dirSelectionView.bind(directorySelectionViewModel);
+        stage.setScene(new Scene(dirSelectionView.getRoot()));
         stage.show();
+
+//        var configView = ConfigView.load();
+//        ConfigViewModel configViewModel = applicationContext.getBean(ConfigViewModel.class);
+//        configView.bind(configViewModel);
+//        stage.setScene(new Scene(configView.root));
+//        stage.show();
 
     }
 

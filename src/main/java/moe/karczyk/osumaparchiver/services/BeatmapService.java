@@ -2,7 +2,6 @@ package moe.karczyk.osumaparchiver.services;
 
 import lombok.RequiredArgsConstructor;
 import moe.karczyk.osumaparchiver.BeatmapRepository;
-import moe.karczyk.osumaparchiver.exceptions.OsuFileParsingException;
 import moe.karczyk.osumaparchiver.models.Beatmap;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +68,7 @@ public class BeatmapService {
     private void parseKeyValueLine(String line, Beatmap.BeatmapBuilder beatmapBuilder) {
         var keyValue = line.split(":", 2);
         if (keyValue.length != 2) {
-            throw new OsuFileParsingException("Malformed line: ".concat(line));
+            return;
         }
 
         switch (keyValue[0].toLowerCase()) {
