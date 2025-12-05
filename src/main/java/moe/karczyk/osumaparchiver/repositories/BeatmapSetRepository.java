@@ -1,4 +1,4 @@
-package moe.karczyk.osumaparchiver;
+package moe.karczyk.osumaparchiver.repositories;
 
 import moe.karczyk.osumaparchiver.models.BeatmapSet;
 import org.springframework.data.jpa.repository.JpaRepository;

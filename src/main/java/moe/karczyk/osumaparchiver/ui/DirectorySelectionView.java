@@ -1,6 +1,5 @@
-package moe.karczyk.osumaparchiver;
+package moe.karczyk.osumaparchiver.ui;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import lombok.Getter;
+import moe.karczyk.osumaparchiver.DirectorySelectionViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,8 +67,8 @@ public class DirectorySelectionView implements Initializable {
     }
 
     @FXML
-    private void onLoadButtonAction(ActionEvent event) {
-
+    private void onLoadButtonAction() {
+        viewModel.loadMapsFromSelectedPath();
     }
 
     @Override

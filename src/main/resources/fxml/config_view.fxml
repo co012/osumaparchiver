@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" prefHeight="800.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ConfigView">
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ui.ConfigView">
 
    <center>
       <TableView fx:id="mapsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -13,13 +13,5 @@
         </columns>
       </TableView>
    </center>
-   <top>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <TextField fx:id="mapDirectoryTextField" />
-            <Button mnemonicParsing="false" onAction="#onBrowseButtonAction" text="Browse" />
-         </children>
-      </HBox>
-   </top>
 
 </BorderPane>

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.services.OsuStuffValidationService;
+import moe.karczyk.osumaparchiver.ui.ConfigPresentationModel;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;

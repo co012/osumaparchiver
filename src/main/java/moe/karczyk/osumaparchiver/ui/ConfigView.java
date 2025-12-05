@@ -1,10 +1,10 @@
-package moe.karczyk.osumaparchiver;
+package moe.karczyk.osumaparchiver.ui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import moe.karczyk.osumaparchiver.ConfigViewModel;
+
 import java.io.IOException;
 
 
@@ -13,8 +13,6 @@ public class ConfigView {
 
     @FXML
     public Parent root;
-    @FXML
-    private TextField mapDirectoryTextField;
 
 
     public static ConfigView load() {
@@ -31,7 +29,6 @@ public class ConfigView {
 
     public void bind(ConfigViewModel configViewModel) {
         this.configViewModel = configViewModel;
-        mapDirectoryTextField.textProperty().bind(configViewModel.getMapsDirectory());
     }
 
 }

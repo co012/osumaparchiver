@@ -1,7 +1,7 @@
 package moe.karczyk.osumaparchiver.services;
 
 import lombok.RequiredArgsConstructor;
-import moe.karczyk.osumaparchiver.BeatmapRepository;
+import moe.karczyk.osumaparchiver.repositories.BeatmapRepository;
 import moe.karczyk.osumaparchiver.models.Beatmap;
 import org.springframework.stereotype.Service;
 

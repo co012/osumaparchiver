@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="root" prefHeight="199.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.DirectorySelectionView">
+<AnchorPane fx:id="root" prefHeight="199.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ui.DirectorySelectionView">
    <children>
       <Label layoutX="26.0" layoutY="32.0" prefHeight="28.0" prefWidth="192.0" text="Input osu songs directory." AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="32.0">
          <font>

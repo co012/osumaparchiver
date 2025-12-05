@@ -2,7 +2,7 @@ package moe.karczyk.osumaparchiver.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
-import moe.karczyk.osumaparchiver.BeatmapSetRepository;
+import moe.karczyk.osumaparchiver.repositories.BeatmapSetRepository;
 import moe.karczyk.osumaparchiver.models.BeatmapSet;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +26,11 @@ public class BeatmapSetService {
                     .map(beatmapService::parseBeatmap)
                     .toList();
             beatmapService.saveBeatmaps(beatmaps);
+
+            if (beatmaps.isEmpty()) {
+                log.warn("Empty BeatmapSet in : %s, skipping".formatted(mapDir.toAbsolutePath()));
+                continue;
+            }
 
             var beatmapSet =  BeatmapSet.builder()
                     .beatmaps(beatmaps)

@@ -3,6 +3,9 @@ package moe.karczyk.osumaparchiver;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.RequiredArgsConstructor;
+import moe.karczyk.osumaparchiver.eventpassing.Event;
+import moe.karczyk.osumaparchiver.eventpassing.Producer;
+import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.services.OsuStuffValidationService;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -10,12 +13,15 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
 public class DirectorySelectionViewModel {
 
     private final OsuStuffValidationService osuStuffValidationService;
+    private final BeatmapSetService beatmapSetService;
+    private final Producer producer;
 
     public final SimpleStringProperty songsDirPath = new  SimpleStringProperty();
     public final SimpleStringProperty infoText  = new  SimpleStringProperty();
@@ -70,6 +76,12 @@ public class DirectorySelectionViewModel {
 
         isPathValid.set(true);
         infoText.set("");
+    }
+
+    public void loadMapsFromSelectedPath() {
+        var path = Paths.get(songsDirPath.getValue());
+        beatmapSetService.loadMapsFrom(path);
+        producer.publish(Event.SONGS_LOADED);
     }
 
 

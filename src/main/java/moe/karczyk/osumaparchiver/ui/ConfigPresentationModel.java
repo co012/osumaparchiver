@@ -1,4 +1,4 @@
-package moe.karczyk.osumaparchiver;
+package moe.karczyk.osumaparchiver.ui;
 
 
 import javafx.beans.property.BooleanProperty;
