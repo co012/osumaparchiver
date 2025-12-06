@@ -8,13 +8,9 @@ import lombok.extern.apachecommons.CommonsLog;
 import moe.karczyk.osumaparchiver.eventpassing.Consumer;
 import moe.karczyk.osumaparchiver.eventpassing.Event;
 
-import java.util.concurrent.ArrayBlockingQueue;
-
 @RequiredArgsConstructor
 @CommonsLog
 public class StageManager implements Consumer {
-
-    private final ArrayBlockingQueue<Event> eventQueue = new ArrayBlockingQueue<>(5);
 
     private final Stage mainStage;
     private final DirectorySelectionView directorySelectionView;
@@ -22,37 +18,23 @@ public class StageManager implements Consumer {
 
     @Override
     public void consume(Event event) {
-        try {
-            eventQueue.add(event);
-        } catch (IllegalStateException e) {
-            log.error("Event queue is full");
+        if (Platform.isFxApplicationThread()) {
+            handleEvent(event);
+        } else {
+            Platform.runLater(() -> handleEvent(event));
         }
     }
 
     public void run() {
         showSelectDirectoryScene();
-        var eventReceiverThread = new Thread(this::handleEvent, "eventReceiverThread");
-        eventReceiverThread.start();
     }
 
-    private void handleEvent() {
-        while (true) {
-            Event event;
-            try {
-                event = eventQueue.take();
-            } catch (InterruptedException e) {
-                log.warn("Event queue has bean interrupted");
-                break;
-            }
-
+    private void handleEvent(Event event) {
             switch (event) {
                 case SONGS_LOADED -> Platform.runLater(this::showConfigScene);
                 case SHUTDOWN -> {
-                    Platform.runLater(mainStage::close);
-                    return;
                 }
             }
-        }
     }
 
     private void showSelectDirectoryScene() {
