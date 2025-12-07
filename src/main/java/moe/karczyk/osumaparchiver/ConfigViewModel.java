@@ -21,13 +21,6 @@ public class ConfigViewModel {
 
 
     private void setOsuMapsPath(Path mapsPath) {
-        var result = osuStuffValidationService.isMapsDirectory(mapsPath);
-        getIsMapsDirectoryValid().setValue(result.success());
-        getMapsDirectoryErrorMsg().setValue(result.message());
-        getMapsDirectory().setValue(mapsPath.toAbsolutePath().toString());
 
-        if (result.success()) {
-            beatmapSetService.loadMapsFrom(mapsPath);
-        }
     }
 }

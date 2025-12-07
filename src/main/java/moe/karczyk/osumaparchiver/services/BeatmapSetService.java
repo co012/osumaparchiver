@@ -2,8 +2,8 @@ package moe.karczyk.osumaparchiver.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
-import moe.karczyk.osumaparchiver.repositories.BeatmapSetRepository;
 import moe.karczyk.osumaparchiver.models.BeatmapSet;
+import moe.karczyk.osumaparchiver.repositories.BeatmapSetRepository;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -17,10 +17,18 @@ public class BeatmapSetService {
     private final BeatmapService beatmapService;
     private final BeatmapSetRepository beatmapSetRepository;
 
+    public interface ProgressCallback {
+        void updateProgress(long processedDirs, long total);
+    }
 
-    public void loadMapsFrom(Path mapsPath) {
+    public void loadMapsFrom(Path mapsPath, ProgressCallback callback) {
         var mapDirs = fileAccessService.getDirectoriesInDirectory(mapsPath);
-        for (Path mapDir : mapDirs) {
+        long totalDirs = mapDirs.size();
+        callback.updateProgress(0, totalDirs);
+
+        var it = mapDirs.listIterator();
+        while (it.hasNext()) {
+            var mapDir = it.next();
             var beatmaps = fileAccessService.getFilesInDirectory(mapDir).stream()
                     .filter(p -> p.toString().endsWith(".osu"))
                     .map(beatmapService::parseBeatmap)
@@ -39,7 +47,8 @@ public class BeatmapSetService {
                     .directoryName(mapDir.getFileName().toString())
                     .build();
             beatmapSetRepository.save(beatmapSet);
+            callback.updateProgress(it.nextIndex(), totalDirs);
         }
-
+        callback.updateProgress(totalDirs, totalDirs);
     }
 }

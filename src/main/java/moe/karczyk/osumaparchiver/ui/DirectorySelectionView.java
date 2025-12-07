@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -27,7 +28,11 @@ public class DirectorySelectionView implements Initializable {
     @FXML
     private TextField pathTextField;
     @FXML
+    private Button browseButton;
+    @FXML
     private Button loadButton;
+    @FXML
+    private ProgressBar progressBar;
 
     private DirectorySelectionViewModel viewModel;
     private final DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -47,7 +52,13 @@ public class DirectorySelectionView implements Initializable {
     public void bind(DirectorySelectionViewModel viewModel) {
         this.viewModel = viewModel;
         viewModel.songsDirPath.bindBidirectional(pathTextField.textProperty());
-        loadButton.disableProperty().bind(viewModel.isPathValid.not());
+
+        pathTextField.disableProperty().bind(viewModel.isLoadingMaps);
+        browseButton.disableProperty().bind(viewModel.isLoadingMaps);
+        loadButton.disableProperty().bind(viewModel.isPathValid.not().or(viewModel.isLoadingMaps));
+        progressBar.disableProperty().bind(viewModel.isLoadingMaps.not());
+
+        progressBar.progressProperty().bind(viewModel.loadingProgress);
         infoLabel.textProperty().bind(viewModel.infoText);
     }
 

@@ -1,7 +1,9 @@
 package moe.karczyk.osumaparchiver;
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
 import lombok.RequiredArgsConstructor;
 import moe.karczyk.osumaparchiver.eventpassing.Event;
 import moe.karczyk.osumaparchiver.eventpassing.Producer;
@@ -26,6 +28,8 @@ public class DirectorySelectionViewModel {
     public final SimpleStringProperty songsDirPath = new  SimpleStringProperty();
     public final SimpleStringProperty infoText  = new  SimpleStringProperty();
     public final SimpleBooleanProperty isPathValid = new  SimpleBooleanProperty(false);
+    public final SimpleBooleanProperty isLoadingMaps = new SimpleBooleanProperty(false);
+    public final SimpleDoubleProperty loadingProgress = new SimpleDoubleProperty(0);
 
 
     public void validateSelectedPath(String path) {
@@ -80,9 +84,26 @@ public class DirectorySelectionViewModel {
 
     public void loadMapsFromSelectedPath() {
         var path = Paths.get(songsDirPath.getValue());
-        beatmapSetService.loadMapsFrom(path);
-        producer.publish(Event.SONGS_LOADED);
+        var loadingTask = createLoadingMapsTask(path);
+        loadingProgress.bind(loadingTask.progressProperty());
+        isLoadingMaps.bind(loadingTask.runningProperty());
+        loadingTask.setOnSucceeded(_ -> producer.publish(Event.SONGS_LOADED));
+        var loadingThread = new Thread(loadingTask);
+        loadingThread.setDaemon(true);
+        loadingThread.start();
     }
+
+    private Task<Void> createLoadingMapsTask(Path path) {
+        return new Task<>() {
+            @Override
+            protected Void call() {
+                beatmapSetService.loadMapsFrom(path, this::updateProgress);
+                return null;
+            }
+        };
+    }
+
+
 
 
 
