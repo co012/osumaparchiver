@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import moe.karczyk.osumaparchiver.models.BeatmapSet;
 import moe.karczyk.osumaparchiver.repositories.BeatmapSetRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,5 +52,14 @@ public class BeatmapSetService {
             callback.updateProgress(it.nextIndex(), totalDirs);
         }
         callback.updateProgress(totalDirs, totalDirs);
+    }
+
+    public List<BeatmapSet> getBeatmapSetsPage(int pageIdx, int pageSize) {
+        var pageInfo = PageRequest.of(pageIdx, pageSize);
+        return beatmapSetRepository.findAll(pageInfo).toList();
+    }
+
+    public long getBeatmapSetsCount() {
+        return beatmapSetRepository.count();
     }
 }

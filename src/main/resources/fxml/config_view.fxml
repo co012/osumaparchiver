@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
 <BorderPane fx:id="root" prefHeight="800.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ui.ConfigView">
-
+    <bottom>
+        <Pagination fx:id="pagination" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+    </bottom>
    <center>
-      <TableView fx:id="mapsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+       <TableView fx:id="table" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+            <TableColumn fx:id="nameCol" editable="false" prefWidth="399.0" sortable="false" text="Name"/>
         </columns>
       </TableView>
    </center>

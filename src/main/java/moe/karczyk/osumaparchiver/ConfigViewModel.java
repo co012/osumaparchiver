@@ -1,26 +1,33 @@
 package moe.karczyk.osumaparchiver;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Delegate;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
-import moe.karczyk.osumaparchiver.services.OsuStuffValidationService;
-import moe.karczyk.osumaparchiver.ui.ConfigPresentationModel;
 import org.springframework.stereotype.Component;
-
-import java.nio.file.Path;
 
 
 @Component
 @RequiredArgsConstructor
 public class ConfigViewModel {
-    private final OsuStuffValidationService osuStuffValidationService;
     private final BeatmapSetService beatmapSetService;
 
-    @Delegate
-    private final ConfigPresentationModel configPresentationModel = new ConfigPresentationModel();
+    public final ObservableList<BeatmapSetPresent> visibleBeatmapSets = FXCollections.observableArrayList();
 
 
-    private void setOsuMapsPath(Path mapsPath) {
+    public int getPageCount(int pageSize) {
+        return Math.toIntExact(Math.ceilDiv(beatmapSetService.getBeatmapSetsCount(), pageSize));
 
     }
+
+    public void changePage(int pageIdx, int pageSize) {
+        visibleBeatmapSets.clear();
+        beatmapSetService.getBeatmapSetsPage(pageIdx, pageSize)
+                .stream()
+                .map(map -> new BeatmapSetPresent(map.getName()))
+                .forEach(visibleBeatmapSets::add);
+
+    }
+
+
 }
