@@ -6,13 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Pagination;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import moe.karczyk.osumaparchiver.BeatmapSetPresent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import moe.karczyk.osumaparchiver.ConfigViewModel;
+import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
@@ -27,6 +31,8 @@ public class ConfigView implements Initializable {
     private TableView<BeatmapSetPresent> table;
     @FXML
     private TableColumn<BeatmapSetPresent, String> nameCol;
+    @FXML
+    private TableColumn<BeatmapSetPresent, String> archiveCol;
 
     private final int ITEMS_PER_PAGE = 10;
 
@@ -34,6 +40,14 @@ public class ConfigView implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         pagination.currentPageIndexProperty().addListener(
                 (_, _, newValue) -> onPageChange(newValue.intValue())
+        );
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        nameCol.setCellValueFactory(
+                it -> new SimpleStringProperty(it.getValue().name())
+        );
+        archiveCol.setCellValueFactory(
+                it -> new SimpleStringProperty(it.getValue().archive() ? "YES" : "NO")
         );
     }
 
@@ -58,9 +72,7 @@ public class ConfigView implements Initializable {
     public void bind(ConfigViewModel configViewModel) {
         this.configViewModel = configViewModel;
         table.setItems(configViewModel.visibleBeatmapSets);
-        nameCol.setCellValueFactory(
-                it -> new SimpleStringProperty(it.getValue().name())
-        );
+
     }
 
     private void onPageChange(int pageIdx) {
@@ -71,6 +83,19 @@ public class ConfigView implements Initializable {
         pagination.setPageCount(configViewModel.getPageCount(ITEMS_PER_PAGE));
         onPageChange(pagination.getCurrentPageIndex());
     }
+
+    @FXML
+    private void onKeyReleased(KeyEvent event) {
+        if (event.getCode() == KeyCode.A || event.getCode() == KeyCode.U) {
+            var selected = table.getSelectionModel().getSelectedItems();
+            var selectedRows = new ArrayList<>(table.getSelectionModel().getSelectedIndices());
+            configViewModel.changeBeatmapSetsArchiveStatus(selected, event.getCode() == KeyCode.A);
+            refresh();
+            selectedRows.forEach(rowIdx -> table.getSelectionModel().select(rowIdx));
+        }
+    }
+
+
 
 
 }

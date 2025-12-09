@@ -4,7 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.RequiredArgsConstructor;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
+import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 
 @Component
@@ -24,9 +27,20 @@ public class ConfigViewModel {
         visibleBeatmapSets.clear();
         beatmapSetService.getBeatmapSetsPage(pageIdx, pageSize)
                 .stream()
-                .map(map -> new BeatmapSetPresent(map.getName()))
+                .map(map -> BeatmapSetPresent.builder()
+                        .id(map.getId())
+                        .name(map.getName())
+                        .archive(map.isSelectedToArchive())
+                        .build())
                 .forEach(visibleBeatmapSets::add);
 
+    }
+
+    public void changeBeatmapSetsArchiveStatus(List<BeatmapSetPresent> beatmapSets, boolean archive) {
+        var selectedIds = beatmapSets.stream()
+                .map(BeatmapSetPresent::id)
+                .toList();
+        beatmapSetService.changeArchiveSelectionStatus(selectedIds, archive);
     }
 
 

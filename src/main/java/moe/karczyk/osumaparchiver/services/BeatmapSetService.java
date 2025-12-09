@@ -6,6 +6,7 @@ import moe.karczyk.osumaparchiver.models.BeatmapSet;
 import moe.karczyk.osumaparchiver.repositories.BeatmapSetRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -61,5 +62,10 @@ public class BeatmapSetService {
 
     public long getBeatmapSetsCount() {
         return beatmapSetRepository.count();
+    }
+
+    @Transactional
+    public void changeArchiveSelectionStatus(List<Long> beatmapSetIds, boolean archive) {
+        beatmapSetRepository.updateArchiveSelectionStatus(beatmapSetIds, archive);
     }
 }

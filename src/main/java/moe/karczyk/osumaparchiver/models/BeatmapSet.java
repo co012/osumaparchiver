@@ -29,4 +29,6 @@ public class BeatmapSet {
     @OneToMany
     private List<Beatmap> beatmaps;
 
+    private boolean selectedToArchive;
+
 }
