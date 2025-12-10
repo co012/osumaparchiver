@@ -3,6 +3,7 @@ package moe.karczyk.osumaparchiver;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import moe.karczyk.osumaparchiver.eventpassing.Producer;
+import moe.karczyk.osumaparchiver.ui.BigPictureView;
 import moe.karczyk.osumaparchiver.ui.ConfigView;
 import moe.karczyk.osumaparchiver.ui.DirectorySelectionView;
 import moe.karczyk.osumaparchiver.ui.StageManager;
@@ -30,7 +31,11 @@ public class JavaFxLauncher extends Application {
         ConfigViewModel configViewModel = applicationContext.getBean(ConfigViewModel.class);
         configView.bind(configViewModel);
 
-        var stageManager = new StageManager(stage, dirSelectionView, configView);
+        var bigPictureView = BigPictureView.load();
+        BigPictureViewModel bigPictureViewModel = applicationContext.getBean(BigPictureViewModel.class);
+        bigPictureView.bind(bigPictureViewModel);
+
+        var stageManager = new StageManager(stage, dirSelectionView, configView, bigPictureView);
         var producer = applicationContext.getBean(Producer.class);
         producer.addConsumer(stageManager);
         stageManager.run();

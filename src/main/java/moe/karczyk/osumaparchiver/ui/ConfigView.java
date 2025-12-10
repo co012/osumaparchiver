@@ -92,7 +92,16 @@ public class ConfigView implements Initializable {
             configViewModel.changeBeatmapSetsArchiveStatus(selected, event.getCode() == KeyCode.A);
             refresh();
             selectedRows.forEach(rowIdx -> table.getSelectionModel().select(rowIdx));
+        } else if (event.getCode() == KeyCode.B) {
+            var target = table.getSelectionModel()
+                    .getSelectedItems()
+                    .stream()
+                    .findFirst()
+                    .orElse(table.getItems().getFirst());
+            configViewModel.openBigPictureOn(target);
+
         }
+
     }
 
 

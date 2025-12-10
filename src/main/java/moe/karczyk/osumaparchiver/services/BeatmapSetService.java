@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +63,10 @@ public class BeatmapSetService {
 
     public long getBeatmapSetsCount() {
         return beatmapSetRepository.count();
+    }
+
+    public Optional<BeatmapSet> findBeatmapSetWithId(long id) {
+        return beatmapSetRepository.findById(id);
     }
 
     @Transactional

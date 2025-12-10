@@ -1,9 +1,6 @@
 package moe.karczyk.osumaparchiver.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +23,7 @@ public class BeatmapSet {
     private String fullDirectoryPath;
     private String name;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Beatmap> beatmaps;
 
     private boolean selectedToArchive;

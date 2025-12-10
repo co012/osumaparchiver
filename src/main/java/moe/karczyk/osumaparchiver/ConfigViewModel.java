@@ -3,6 +3,8 @@ package moe.karczyk.osumaparchiver;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.RequiredArgsConstructor;
+import moe.karczyk.osumaparchiver.eventpassing.Event;
+import moe.karczyk.osumaparchiver.eventpassing.Producer;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConfigViewModel {
     private final BeatmapSetService beatmapSetService;
+    private final BigPictureViewModel bigPictureViewModel;
+    private final Producer producer;
 
     public final ObservableList<BeatmapSetPresent> visibleBeatmapSets = FXCollections.observableArrayList();
 
@@ -44,4 +48,8 @@ public class ConfigViewModel {
     }
 
 
+    public void openBigPictureOn(BeatmapSetPresent target) {
+        bigPictureViewModel.showBeatmapSet(target.id());
+        producer.publish(Event.BIG_PICTURE_TARGET_SELECTED);
+    }
 }
