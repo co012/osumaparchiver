@@ -1,28 +1,48 @@
 package moe.karczyk.osumaparchiver;
 
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.image.Image;
+import javafx.beans.property.SimpleStringProperty;
 import lombok.RequiredArgsConstructor;
+import moe.karczyk.osumaparchiver.models.Beatmap;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
+import moe.karczyk.osumaparchiver.services.UrlEncodingService;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
 public class BigPictureViewModel {
     private final BeatmapSetService beatmapSetService;
-    public final SimpleObjectProperty<Image> beatmapSetImg = new SimpleObjectProperty<>(null);
+    private final UrlEncodingService urlEncodingService;
+
+    public final SimpleStringProperty backgroundUri = new SimpleStringProperty();
+    public final SimpleStringProperty title = new SimpleStringProperty();
+    public final SimpleStringProperty artists = new SimpleStringProperty();
+    public final SimpleStringProperty creators = new SimpleStringProperty();
+
 
     public void showBeatmapSet(long beatmapSetId) {
         var beatmapSet = beatmapSetService.findBeatmapSetWithId(beatmapSetId).orElseThrow();
-        try {
-            beatmapSetImg.setValue(new Image(new FileInputStream(Path.of(beatmapSet.getFullDirectoryPath(), beatmapSet.getBeatmaps().getFirst().getBackgroundFilename()).toFile())));
-        } catch (FileNotFoundException ex) {
-            throw new RuntimeException(ex);
-        }
+        var backgroundPath = Path.of(beatmapSet.getFullDirectoryPath(), beatmapSet.getBeatmaps().getFirst().getBackgroundFilename());
+        backgroundUri.set(urlEncodingService.encodePath(backgroundPath));
+
+        title.set(beatmapSet.getName());
+
+        var artists = beatmapSet.getBeatmaps()
+                .stream()
+                .map(Beatmap::getArtist)
+                .distinct()
+                .reduce((s1, s2) -> String.join(s1, ", ", s2))
+                .orElse("N/A");
+        this.artists.set(artists);
+
+        var creators = beatmapSet.getBeatmaps()
+                .stream()
+                .map(Beatmap::getCreator)
+                .distinct()
+                .reduce((s1, s2) -> String.join(s1, ", ", s2))
+                .orElse("N/A");
+        this.creators.set(creators);
 
 
     }
