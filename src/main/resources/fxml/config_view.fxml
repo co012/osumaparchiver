@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Pagination?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.BorderPane?>
-<BorderPane fx:id="root" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.12"
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane fx:id="root" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ui.ConfigView">
     <bottom>
         <Pagination fx:id="pagination" prefWidth="200.0" BorderPane.alignment="CENTER"/>
@@ -17,5 +16,16 @@
         </columns>
       </TableView>
    </center>
+    <top>
+        <HBox alignment="CENTER_LEFT" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Rows: "/>
+                <ChoiceBox fx:id="rowsCountBox" prefWidth="150.0"/>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" top="10.0"/>
+            </padding>
+        </HBox>
+    </top>
 
 </BorderPane>

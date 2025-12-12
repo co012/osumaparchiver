@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import moe.karczyk.osumaparchiver.ConfigViewModel;
@@ -28,16 +25,21 @@ public class ConfigView implements Initializable {
     @FXML
     private Pagination pagination;
     @FXML
+    private ChoiceBox<Integer> rowsCountBox;
+    @FXML
     private TableView<BeatmapSetPresent> table;
     @FXML
     private TableColumn<BeatmapSetPresent, String> nameCol;
     @FXML
     private TableColumn<BeatmapSetPresent, String> archiveCol;
 
-    private final int ITEMS_PER_PAGE = 10;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        rowsCountBox.getItems().addAll(10, 20, 30, 40, 50, 60);
+        rowsCountBox.setValue(40);
+        rowsCountBox.valueProperty().addListener(
+                (_, oldVal, newVal) -> changeRowsPerPageCount(oldVal, newVal)
+        );
         pagination.currentPageIndexProperty().addListener(
                 (_, _, newValue) -> onPageChange(newValue.intValue())
         );
@@ -76,12 +78,24 @@ public class ConfigView implements Initializable {
     }
 
     private void onPageChange(int pageIdx) {
-        configViewModel.changePage(pageIdx, ITEMS_PER_PAGE);
+        configViewModel.changePage(pageIdx, rowsCountBox.getValue());
     }
 
     private void refresh() {
-        pagination.setPageCount(configViewModel.getPageCount(ITEMS_PER_PAGE));
+        pagination.setPageCount(configViewModel.getPageCount(rowsCountBox.getValue()));
         onPageChange(pagination.getCurrentPageIndex());
+    }
+
+    private void changeRowsPerPageCount(int oldVal, int newVal) {
+        var oldPage = pagination.getCurrentPageIndex();
+        pagination.setPageCount(configViewModel.getPageCount(newVal));
+        var newPage = oldPage * oldVal / newVal;
+        pagination.setCurrentPageIndex(newPage);
+
+        if (table.getItems().size() == oldVal) {
+            onPageChange(newPage);
+        }
+
     }
 
     @FXML
@@ -103,8 +117,6 @@ public class ConfigView implements Initializable {
         }
 
     }
-
-
 
 
 }
