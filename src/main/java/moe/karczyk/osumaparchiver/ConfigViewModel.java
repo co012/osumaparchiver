@@ -49,7 +49,7 @@ public class ConfigViewModel {
 
 
     public void openBigPictureOn(BeatmapSetPresent target) {
-        bigPictureViewModel.showBeatmapSet(target.id());
+        bigPictureViewModel.changeBeatmapSet(target.id());
         producer.publish(Event.BIG_PICTURE_TARGET_SELECTED);
     }
 }

@@ -1,5 +1,6 @@
 package moe.karczyk.osumaparchiver;
 
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.RequiredArgsConstructor;
 import moe.karczyk.osumaparchiver.models.Beatmap;
@@ -19,9 +20,11 @@ public class BigPictureViewModel {
     public final SimpleStringProperty title = new SimpleStringProperty();
     public final SimpleStringProperty artists = new SimpleStringProperty();
     public final SimpleStringProperty creators = new SimpleStringProperty();
+    public final SimpleLongProperty currentBeatmapSetId = new SimpleLongProperty();
 
 
-    public void showBeatmapSet(long beatmapSetId) {
+    public void changeBeatmapSet(long beatmapSetId) {
+        currentBeatmapSetId.set(beatmapSetId);
         var beatmapSet = beatmapSetService.findBeatmapSetWithId(beatmapSetId).orElseThrow();
         var backgroundPath = Path.of(beatmapSet.getFullDirectoryPath(), beatmapSet.getBeatmaps().getFirst().getBackgroundFilename());
         backgroundUri.set(urlEncodingService.encodePath(backgroundPath));
@@ -43,7 +46,14 @@ public class BigPictureViewModel {
                 .reduce((s1, s2) -> String.join(s1, ", ", s2))
                 .orElse("N/A");
         this.creators.set(creators);
+    }
 
+    //TODO: boundary check
+    public void nextBeatmapSet() {
+        changeBeatmapSet(currentBeatmapSetId.get() + 1);
+    }
 
+    public void previousBeatmapSet() {
+        changeBeatmapSet(currentBeatmapSetId.get() - 1);
     }
 }

@@ -3,14 +3,18 @@ package moe.karczyk.osumaparchiver.ui;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import moe.karczyk.osumaparchiver.BigPictureViewModel;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
-public class BigPictureView {
+public class BigPictureView implements Initializable {
 
     @FXML
     public Parent root;
@@ -35,9 +39,17 @@ public class BigPictureView {
         return view;
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        root.sceneProperty().addListener((_, _, scene) -> {
+            if (scene != null) {
+                scene.addEventHandler(KeyEvent.KEY_RELEASED, this::onKeyReleased);
+            }
+        });
+    }
+
     public void bind(BigPictureViewModel viewModel) {
         this.viewModel = viewModel;
-
 
         viewModel.backgroundUri.addListener((_, _, newUri) -> changeBackground(newUri));
         titleLabel.textProperty().bind(viewModel.title);
@@ -47,8 +59,14 @@ public class BigPictureView {
     }
 
     private void changeBackground(String backgroundUri) {
-        System.out.println(backgroundUri);
-        System.out.println();
         root.setStyle("-fx-background-image: url('%s');".formatted(backgroundUri));
+    }
+
+    @FXML
+    private void onKeyReleased(KeyEvent event) {
+        switch (event.getCode()) {
+            case LEFT -> viewModel.previousBeatmapSet();
+            case RIGHT -> viewModel.nextBeatmapSet();
+        }
     }
 }
