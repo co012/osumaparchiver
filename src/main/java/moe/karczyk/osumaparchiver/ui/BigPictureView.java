@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import moe.karczyk.osumaparchiver.BigPictureViewModel;
@@ -26,6 +27,8 @@ public class BigPictureView implements Initializable {
     private Label artistLabel;
     @FXML
     private Label creatorLabel;
+    @FXML
+    private Button nextButton, previusButton;
 
     public static BigPictureView load() {
         FXMLLoader loader = new FXMLLoader(ConfigView.class.getResource("/fxml/big_picture_view.fxml"));
@@ -68,5 +71,15 @@ public class BigPictureView implements Initializable {
             case LEFT -> viewModel.previousBeatmapSet();
             case RIGHT -> viewModel.nextBeatmapSet();
         }
+    }
+
+    @FXML
+    private void onNextButtonAction() {
+        viewModel.nextBeatmapSet();
+    }
+
+    @FXML
+    private void onPreviousButtonAction() {
+        viewModel.previousBeatmapSet();
     }
 }

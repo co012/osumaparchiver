@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
+<?import java.lang.String?>
 <AnchorPane fx:id="root" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../stylesheet.css"
             xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="moe.karczyk.osumaparchiver.ui.BigPictureView">
    <children>
-      <VBox layoutX="910.0" layoutY="981.0" prefHeight="138.0" prefWidth="1520.0" AnchorPane.bottomAnchor="0.0"
-            AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+      <VBox fx:id="infoHBox" layoutX="910.0" layoutY="981.0" prefHeight="150.0" prefWidth="1520.0"
+            stylesheets="@../stylesheet.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="200.0"
+            AnchorPane.rightAnchor="200.0">
          <children>
             <Label fx:id="titleLabel" text="Title">
                <font>
@@ -30,6 +32,27 @@
                </font>
             </Label>
          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         </padding>
+         <styleClass>
+            <String fx:value="container-background"/>
+            <String fx:value="grey-border"/>
+         </styleClass>
       </VBox>
+      <Button fx:id="previousButton" graphicTextGap="0.0" layoutX="14.0" layoutY="935.0" mnemonicParsing="false"
+              onAction="#onPreviousButtonAction" prefHeight="150.0" prefWidth="130.0" styleClass="grey-border"
+              stylesheets="@../stylesheet.css" text="&lt;" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="32.0">
+         <font>
+            <Font name="Marlett" size="48.0"/>
+         </font>
+      </Button>
+      <Button fx:id="nextButton" graphicTextGap="0.0" layoutX="1818.0" layoutY="935.0" mnemonicParsing="false"
+              onAction="#onNextButtonAction" prefHeight="150.0" prefWidth="130.0" styleClass="grey-border"
+              stylesheets="@../stylesheet.css" text="&gt;" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="32.0">
+         <font>
+            <Font name="Marlett" size="48.0"/>
+         </font>
+      </Button>
    </children>
 </AnchorPane>

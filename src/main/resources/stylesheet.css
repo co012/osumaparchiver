@@ -4,5 +4,29 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-background-size: contain;
+}
 
+.container-background {
+    -fx-background-color: rgba(28, 28, 28, 0.85);
+}
+
+.grey-border {
+    -fx-background-radius: 6px;
+    -fx-border-radius: 5px;
+    -fx-border-color: rgba(225, 225, 225, 0.9);
+    -fx-border-style: solid;
+    -fx-border-width: 3px;
+}
+
+.label {
+    -fx-text-fill: rgba(225, 225, 225, 0.9);
+}
+
+.button {
+    -fx-background-color: rgba(28, 28, 28, 0.85);
+    -fx-text-fill: rgba(225, 225, 225, 0.9);
+}
+
+.button:hover {
+    -fx-background-color: rgba(28, 28, 28, 1);
 }
