@@ -34,6 +34,9 @@ public class ConfigViewModel {
                 .map(map -> BeatmapSetPresent.builder()
                         .id(map.getId())
                         .name(map.getName())
+                        .artists(String.join(", ", map.getArtists()))
+                        .creators(String.join(", ", map.getCreators()))
+                        .beatmapCount(map.getBeatmaps().size())
                         .archive(map.isSelectedToArchive())
                         .build())
                 .forEach(visibleBeatmapSets::add);

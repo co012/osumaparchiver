@@ -3,7 +3,6 @@ package moe.karczyk.osumaparchiver;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.RequiredArgsConstructor;
-import moe.karczyk.osumaparchiver.models.Beatmap;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.services.UrlEncodingService;
 import org.springframework.stereotype.Service;
@@ -31,20 +30,10 @@ public class BigPictureViewModel {
 
         title.set(beatmapSet.getName());
 
-        var artists = beatmapSet.getBeatmaps()
-                .stream()
-                .map(Beatmap::getArtist)
-                .distinct()
-                .reduce((s1, s2) -> String.join(s1, ", ", s2))
-                .orElse("N/A");
+        var artists = String.join(", ", beatmapSet.getArtists());
         this.artists.set(artists);
 
-        var creators = beatmapSet.getBeatmaps()
-                .stream()
-                .map(Beatmap::getCreator)
-                .distinct()
-                .reduce((s1, s2) -> String.join(s1, ", ", s2))
-                .orElse("N/A");
+        var creators = String.join(", ", beatmapSet.getCreators());
         this.creators.set(creators);
     }
 

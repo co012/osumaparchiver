@@ -1,5 +1,6 @@
 package moe.karczyk.osumaparchiver.ui;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +32,12 @@ public class ConfigView implements Initializable {
     @FXML
     private TableColumn<BeatmapSetPresent, String> nameCol;
     @FXML
+    private TableColumn<BeatmapSetPresent, String> artistsCol;
+    @FXML
+    private TableColumn<BeatmapSetPresent, String> creatorsCol;
+    @FXML
+    private TableColumn<BeatmapSetPresent, Number> beatmapCountCol;
+    @FXML
     private TableColumn<BeatmapSetPresent, String> archiveCol;
 
     @Override
@@ -47,6 +54,15 @@ public class ConfigView implements Initializable {
 
         nameCol.setCellValueFactory(
                 it -> new SimpleStringProperty(it.getValue().name())
+        );
+        artistsCol.setCellValueFactory(
+                it -> new SimpleStringProperty(it.getValue().artists())
+        );
+        creatorsCol.setCellValueFactory(
+                it -> new SimpleStringProperty(it.getValue().creators())
+        );
+        beatmapCountCol.setCellValueFactory(
+                it -> new SimpleIntegerProperty(it.getValue().beatmapCount())
         );
         archiveCol.setCellValueFactory(
                 it -> new SimpleStringProperty(it.getValue().archive() ? "YES" : "NO")
