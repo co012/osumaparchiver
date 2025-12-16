@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane fx:id="root" prefHeight="1000.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/25"
+<BorderPane fx:id="root" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ui.ConfigView">
     <bottom>
         <Pagination fx:id="pagination" prefWidth="200.0" BorderPane.alignment="CENTER"/>
@@ -33,5 +33,13 @@
             </padding>
         </HBox>
     </top>
+    <right>
+        <TabPane fx:id="beatmapTabPane" prefHeight="200.0" prefWidth="450.0" tabClosingPolicy="UNAVAILABLE"
+                 BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </BorderPane.margin>
+        </TabPane>
+    </right>
 
 </BorderPane>

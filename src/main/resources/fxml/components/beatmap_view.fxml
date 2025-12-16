@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.*?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fx:id="background" fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../default_img.png"/>
+            </image>
+        </ImageView>
+        <Label fx:id="title" layoutX="10.0" layoutY="140.0" text="Title: N/A">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="titleOriginal" layoutX="10.0" layoutY="157.0" text="Title Original: N/A">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="artist" text="Artist: N/A">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="artistOriginal" layoutX="10.0" layoutY="123.0" text="Artist Original: N/A">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="creator" layoutX="10.0" layoutY="157.0" text="Creator: N/A">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+    </children>
+</VBox>

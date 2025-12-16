@@ -2,6 +2,7 @@ package moe.karczyk.osumaparchiver.ui;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import moe.karczyk.osumaparchiver.ConfigViewModel;
+import moe.karczyk.osumaparchiver.ui.models.BeatmapPresent;
 import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
 
 import java.io.IOException;
@@ -39,6 +41,8 @@ public class ConfigView implements Initializable {
     private TableColumn<BeatmapSetPresent, Number> beatmapCountCol;
     @FXML
     private TableColumn<BeatmapSetPresent, String> archiveCol;
+    @FXML
+    private TabPane beatmapTabPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -90,6 +94,23 @@ public class ConfigView implements Initializable {
     public void bind(ConfigViewModel configViewModel) {
         this.configViewModel = configViewModel;
         table.setItems(configViewModel.visibleBeatmapSets);
+        table.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (_, _, item) -> configViewModel.showBeatmapsFromSet(item.id())
+                );
+
+        configViewModel.visibleBeatmaps.addListener((ListChangeListener<BeatmapPresent>) c -> {
+            while (c.next()) {
+                if (c.wasRemoved()) {
+                    beatmapTabPane.getTabs().clear();
+                    c.getList().forEach(beatmap -> beatmapTabPane.getTabs().add(new BeatmapTab(beatmap)));
+                } else if (c.wasAdded()) {
+                    c.getAddedSubList().forEach(beatmap -> beatmapTabPane.getTabs().add(new BeatmapTab(beatmap)));
+                }
+            }
+
+        });
 
     }
 
