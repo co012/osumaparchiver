@@ -2,7 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <BorderPane fx:id="root" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ui.ConfigView">
     <bottom>
@@ -34,12 +37,54 @@
         </HBox>
     </top>
     <right>
-        <TabPane fx:id="beatmapTabPane" prefHeight="200.0" prefWidth="450.0" tabClosingPolicy="UNAVAILABLE"
-                 BorderPane.alignment="CENTER">
+        <VBox maxWidth="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </BorderPane.margin>
-        </TabPane>
+            <children>
+                <TabPane fx:id="beatmapTabPane" prefHeight="30.0" tabClosingPolicy="UNAVAILABLE"/>
+                <VBox maxHeight="-Infinity" maxWidth="500.0" minHeight="-Infinity" minWidth="-Infinity"
+                      VBox.vgrow="ALWAYS">
+                    <children>
+                        <ImageView fx:id="background" fitHeight="300.0" fitWidth="500.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@../default_img.png"/>
+                            </image>
+                        </ImageView>
+                        <Label fx:id="title" layoutX="10.0" layoutY="140.0" maxWidth="480.0" text="Title: N/A"
+                               wrapText="true">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="titleOriginal" layoutX="10.0" layoutY="157.0" maxWidth="480.0"
+                               text="Title Original: N/A" wrapText="true">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="artist" maxWidth="480.0" text="Artist: N/A" wrapText="true">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="artistOriginal" layoutX="10.0" layoutY="123.0" maxWidth="480.0"
+                               text="Artist Original: N/A" wrapText="true">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="creator" layoutX="10.0" layoutY="157.0" maxWidth="480.0" text="Creator: N/A"
+                               wrapText="true">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
     </right>
 
 </BorderPane>

@@ -1,5 +1,7 @@
 package moe.karczyk.osumaparchiver;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,8 @@ public class ConfigViewModel {
     private final Producer producer;
 
     public final ObservableList<BeatmapSetPresent> visibleBeatmapSets = FXCollections.observableArrayList();
-    public final ObservableList<BeatmapPresent> visibleBeatmaps = FXCollections.observableArrayList();
+    public final ObservableList<BeatmapPresent> availableBeatmaps = FXCollections.observableArrayList();
+    public final ObjectProperty<BeatmapPresent> activeBeatmap = new SimpleObjectProperty<>(BeatmapPresent.EMPTY);
 
 
     public int getPageCount(int pageSize) {
@@ -64,8 +67,8 @@ public class ConfigViewModel {
         producer.publish(Event.BIG_PICTURE_TARGET_SELECTED);
     }
 
-    public void showBeatmapsFromSet(long beatmapSetId) {
-        visibleBeatmaps.clear();
+    public void loadAvailableBeatmapsInSet(long beatmapSetId) {
+        availableBeatmaps.clear();
         var beatmapSet = beatmapSetService.findBeatmapSetWithId(beatmapSetId)
                 .orElseThrow();
         beatmapSet.getBeatmaps()
@@ -84,6 +87,18 @@ public class ConfigViewModel {
                                         urlEncodingService.encodePath(Path.of(beatmapSet.getFullDirectoryPath(), map.getBackgroundFilename()))
                         )
                         .build())
-                .forEach(visibleBeatmaps::addLast);
+                .forEach(availableBeatmaps::addLast);
     }
+
+    public void setActiveBeatmap(int availableBeatmapIdx) {
+        if (availableBeatmapIdx < 0 || availableBeatmapIdx > availableBeatmaps.size()) {
+            activeBeatmap.set(BeatmapPresent.EMPTY);
+            return;
+        }
+        activeBeatmap.set(availableBeatmaps.get(availableBeatmapIdx));
+    }
+
+
+
+
 }
