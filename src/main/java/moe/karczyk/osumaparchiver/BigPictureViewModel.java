@@ -21,6 +21,8 @@ public class BigPictureViewModel {
     public final SimpleStringProperty creators = new SimpleStringProperty();
     public final SimpleLongProperty currentBeatmapSetId = new SimpleLongProperty();
 
+    public final SongsPlayer songsPlayer = new SongsPlayer();
+
 
     public void changeBeatmapSet(long beatmapSetId) {
         currentBeatmapSetId.set(beatmapSetId);
@@ -35,6 +37,10 @@ public class BigPictureViewModel {
 
         var creators = String.join(", ", beatmapSet.getCreators());
         this.creators.set(creators);
+
+        var songUrl = urlEncodingService.encodePath(Path.of(beatmapSet.getFullDirectoryPath(), beatmapSet.getBeatmaps().getFirst().getAudioFilename()));
+        var startTime = beatmapSet.getBeatmaps().getFirst().getPreviewTime();
+        songsPlayer.play(songUrl, startTime);
     }
 
     //TODO: boundary check

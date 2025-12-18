@@ -59,6 +59,16 @@ public class BigPictureView implements Initializable {
         artistLabel.textProperty().bind(new SimpleStringProperty("Artist: ").concat(viewModel.artists));
         creatorLabel.textProperty().bind(new SimpleStringProperty("Creators: ").concat(viewModel.creators));
 
+        root.sceneProperty().addListener((_, _, scene) -> {
+            if (scene != null) {
+                scene.windowProperty().addListener((_, _, window) -> {
+                    if (window != null) {
+                        window.setOnHiding((_) -> this.viewModel.songsPlayer.stop());
+                    }
+
+                });
+            }
+        });
     }
 
     private void changeBackground(String backgroundUri) {
