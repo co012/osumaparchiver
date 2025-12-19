@@ -8,7 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Region;
 import moe.karczyk.osumaparchiver.BigPictureViewModel;
+import moe.karczyk.osumaparchiver.ui.managers.BackgroundFadeManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,10 +19,11 @@ import java.util.ResourceBundle;
 
 public class BigPictureView implements Initializable {
 
+    private BigPictureViewModel viewModel;
+    private BackgroundFadeManager backgroundFadeManager;
+
     @FXML
     public Parent root;
-    private BigPictureViewModel viewModel;
-
     @FXML
     private Label titleLabel;
     @FXML
@@ -29,6 +32,8 @@ public class BigPictureView implements Initializable {
     private Label creatorLabel;
     @FXML
     private Button nextButton, previusButton;
+    @FXML
+    private Region bg1, bg2;
 
     public static BigPictureView load() {
         FXMLLoader loader = new FXMLLoader(ConfigView.class.getResource("/fxml/big_picture_view.fxml"));
@@ -49,6 +54,7 @@ public class BigPictureView implements Initializable {
                 scene.addEventHandler(KeyEvent.KEY_RELEASED, this::onKeyReleased);
             }
         });
+        backgroundFadeManager = new BackgroundFadeManager(bg1, bg2);
     }
 
     public void bind(BigPictureViewModel viewModel) {
@@ -72,7 +78,7 @@ public class BigPictureView implements Initializable {
     }
 
     private void changeBackground(String backgroundUri) {
-        root.setStyle("-fx-background-image: url('%s');".formatted(backgroundUri));
+        backgroundFadeManager.fadeToBackground(backgroundUri);
     }
 
     @FXML
