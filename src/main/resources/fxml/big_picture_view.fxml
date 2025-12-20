@@ -60,5 +60,26 @@
              <Font name="Marlett" size="48.0"/>
          </font>
       </Button>
+       <VBox fx:id="archiveIndicator" alignment="CENTER" layoutX="1661.0" layoutY="795.0" maxWidth="300.0"
+             prefHeight="76.0" prefWidth="227.0" stylesheets="@../stylesheet.css" AnchorPane.bottomAnchor="220.0"
+             AnchorPane.rightAnchor="32.0">
+           <children>
+               <Label contentDisplay="CENTER" prefWidth="98.0" text="Archive" textAlignment="CENTER">
+                   <font>
+                       <Font name="Droid Sans Mono Dotted" size="30.0"/>
+                   </font>
+                   <padding>
+                       <Insets bottom="10.0"/>
+                   </padding>
+               </Label>
+           </children>
+           <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+           </padding>
+           <styleClass>
+               <String fx:value="container-background"/>
+               <String fx:value="grey-border"/>
+           </styleClass>
+       </VBox>
    </children>
 </AnchorPane>

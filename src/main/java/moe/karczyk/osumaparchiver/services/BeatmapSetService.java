@@ -73,4 +73,10 @@ public class BeatmapSetService {
     public void changeArchiveSelectionStatus(List<Long> beatmapSetIds, boolean archive) {
         beatmapSetRepository.updateArchiveSelectionStatus(beatmapSetIds, archive);
     }
+
+    @Transactional
+    public void toggleArchiveSelectionForBeatmapSet(long beatmapSetId) {
+        var beatmapSet = findBeatmapSetWithId(beatmapSetId).orElseThrow();
+        changeArchiveSelectionStatus(List.of(beatmapSetId), !beatmapSet.isSelectedToArchive());
+    }
 }

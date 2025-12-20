@@ -1,5 +1,6 @@
 package moe.karczyk.osumaparchiver;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class BigPictureViewModel {
     public final SimpleStringProperty artists = new SimpleStringProperty();
     public final SimpleStringProperty creators = new SimpleStringProperty();
     public final SimpleLongProperty currentBeatmapSetId = new SimpleLongProperty();
+    public final SimpleBooleanProperty isSelectedToArchive = new SimpleBooleanProperty();
 
     public final SongsPlayer songsPlayer = new SongsPlayer();
 
@@ -38,9 +40,18 @@ public class BigPictureViewModel {
         var creators = String.join(", ", beatmapSet.getCreators());
         this.creators.set(creators);
 
+        isSelectedToArchive.set(beatmapSet.isSelectedToArchive());
+
         var songUrl = urlEncodingService.encodePath(Path.of(beatmapSet.getFullDirectoryPath(), beatmapSet.getBeatmaps().getFirst().getAudioFilename()));
         var startTime = beatmapSet.getBeatmaps().getFirst().getPreviewTime();
         songsPlayer.play(songUrl, startTime);
+    }
+
+    public void toggleArchiveSelectionForBeatmapSet(long beatmapSetId) {
+        beatmapSetService.toggleArchiveSelectionForBeatmapSet(beatmapSetId);
+        if (currentBeatmapSetId.get() == beatmapSetId) {
+            isSelectedToArchive.set(!isSelectedToArchive.get());
+        }
     }
 
     //TODO: boundary check

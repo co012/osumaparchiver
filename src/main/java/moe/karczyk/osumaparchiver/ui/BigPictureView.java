@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,6 +35,8 @@ public class BigPictureView implements Initializable {
     private Button nextButton, previusButton;
     @FXML
     private Region bg1, bg2;
+    @FXML
+    private Node archiveIndicator;
 
     public static BigPictureView load() {
         FXMLLoader loader = new FXMLLoader(ConfigView.class.getResource("/fxml/big_picture_view.fxml"));
@@ -55,6 +58,7 @@ public class BigPictureView implements Initializable {
             }
         });
         backgroundFadeManager = new BackgroundFadeManager(bg1, bg2);
+        archiveIndicator.setOpacity(0.0);
     }
 
     public void bind(BigPictureViewModel viewModel) {
@@ -64,6 +68,7 @@ public class BigPictureView implements Initializable {
         titleLabel.textProperty().bind(viewModel.title);
         artistLabel.textProperty().bind(new SimpleStringProperty("Artist: ").concat(viewModel.artists));
         creatorLabel.textProperty().bind(new SimpleStringProperty("Creators: ").concat(viewModel.creators));
+        viewModel.isSelectedToArchive.addListener((_, _, val) -> archiveIndicator.setOpacity(val ? 1.0 : 0.0));
 
         root.sceneProperty().addListener((_, _, scene) -> {
             if (scene != null) {
@@ -86,6 +91,7 @@ public class BigPictureView implements Initializable {
         switch (event.getCode()) {
             case LEFT -> viewModel.previousBeatmapSet();
             case RIGHT -> viewModel.nextBeatmapSet();
+            case A -> viewModel.toggleArchiveSelectionForBeatmapSet(viewModel.currentBeatmapSetId.get());
         }
     }
 
