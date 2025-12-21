@@ -27,13 +27,17 @@ public class JavaFxLauncher extends Application {
         DirectorySelectionViewModel directorySelectionViewModel = applicationContext.getBean(DirectorySelectionViewModel.class);
         dirSelectionView.bind(directorySelectionViewModel);
 
+        var beatmapSetViewModel = applicationContext.getBean(BeatmapSetViewModel.class);
+
         var configView = ConfigView.load();
         ConfigViewModel configViewModel = applicationContext.getBean(ConfigViewModel.class);
         configView.bind(configViewModel);
+        configView.bind(beatmapSetViewModel);
 
         var bigPictureView = BigPictureView.load();
         BigPictureViewModel bigPictureViewModel = applicationContext.getBean(BigPictureViewModel.class);
         bigPictureView.bind(bigPictureViewModel);
+        bigPictureView.bind(beatmapSetViewModel);
 
         var stageManager = new StageManager(stage, dirSelectionView, configView, bigPictureView);
         var producer = applicationContext.getBean(Producer.class);

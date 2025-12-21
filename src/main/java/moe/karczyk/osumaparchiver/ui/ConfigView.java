@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import moe.karczyk.osumaparchiver.BeatmapSetViewModel;
 import moe.karczyk.osumaparchiver.ConfigViewModel;
 import moe.karczyk.osumaparchiver.ui.models.BeatmapPresent;
 import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
@@ -24,6 +25,7 @@ import java.util.ResourceBundle;
 
 public class ConfigView implements Initializable {
     private ConfigViewModel configViewModel;
+    private BeatmapSetViewModel beatmapSetViewModel;
 
     @FXML
     public Parent root;
@@ -82,7 +84,7 @@ public class ConfigView implements Initializable {
         beatmapTabPane.getSelectionModel()
                 .selectedIndexProperty()
                 .addListener(
-                        (_, _, idx) -> configViewModel.setActiveBeatmap(idx.intValue())
+                        (_, _, idx) -> beatmapSetViewModel.setActiveBeatmap(idx.intValue())
                 );
     }
 
@@ -107,15 +109,19 @@ public class ConfigView implements Initializable {
     public void bind(ConfigViewModel configViewModel) {
         this.configViewModel = configViewModel;
         table.setItems(configViewModel.visibleBeatmapSets);
+    }
+
+    public void bind(BeatmapSetViewModel beatmapSetViewModel) {
+        this.beatmapSetViewModel = beatmapSetViewModel;
         table.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(
                         (_, _, item) -> {
-                            if (item != null) configViewModel.loadAvailableBeatmapsInSet(item.id());
+                            if (item != null) this.beatmapSetViewModel.changeBeatmapSet(item.id());
                         }
                 );
 
-        configViewModel.availableBeatmaps.addListener((ListChangeListener<BeatmapPresent>) c -> {
+        beatmapSetViewModel.availableBeatmaps.addListener((ListChangeListener<BeatmapPresent>) c -> {
             while (c.next()) {
                 if (c.wasRemoved()) {
                     beatmapTabPane.getTabs().clear();
@@ -125,8 +131,7 @@ public class ConfigView implements Initializable {
                 }
             }
         });
-
-        configViewModel.activeBeatmap.addListener((_, _, beatmap) -> {
+        beatmapSetViewModel.activeBeatmap.subscribe(beatmap -> {
             title.setText("Title: " + beatmap.title());
             titleOriginal.setText("Title original: " + beatmap.titleOriginal());
             artist.setText("Artist: " + beatmap.artist());
@@ -168,13 +173,7 @@ public class ConfigView implements Initializable {
             refresh();
             selectedRows.forEach(rowIdx -> table.getSelectionModel().select(rowIdx));
         } else if (event.getCode() == KeyCode.B) {
-            var target = table.getSelectionModel()
-                    .getSelectedItems()
-                    .stream()
-                    .findFirst()
-                    .orElse(table.getItems().getFirst());
-            configViewModel.openBigPictureOn(target);
-
+            configViewModel.openBigPictureOn();
         }
 
     }

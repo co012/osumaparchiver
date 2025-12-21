@@ -5,4 +5,5 @@ import lombok.Builder;
 @Builder
 public record BeatmapSetPresent(long id, String name, String artists, String creators, int beatmapCount,
                                 boolean archive) {
+    public static final BeatmapSetPresent EMPTY = new BeatmapSetPresent(-1, "N/A", "N/A", "N/A", 0, false);
 }

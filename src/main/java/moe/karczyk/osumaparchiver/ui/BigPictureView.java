@@ -1,6 +1,5 @@
 package moe.karczyk.osumaparchiver.ui;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
+import moe.karczyk.osumaparchiver.BeatmapSetViewModel;
 import moe.karczyk.osumaparchiver.BigPictureViewModel;
 import moe.karczyk.osumaparchiver.ui.managers.BackgroundFadeManager;
 
@@ -20,7 +20,8 @@ import java.util.ResourceBundle;
 
 public class BigPictureView implements Initializable {
 
-    private BigPictureViewModel viewModel;
+    private BigPictureViewModel bigPictureViewModel;
+    private BeatmapSetViewModel beatmapSetViewModel;
     private BackgroundFadeManager backgroundFadeManager;
 
     @FXML
@@ -62,24 +63,40 @@ public class BigPictureView implements Initializable {
     }
 
     public void bind(BigPictureViewModel viewModel) {
-        this.viewModel = viewModel;
-
-        viewModel.backgroundUri.addListener((_, _, newUri) -> changeBackground(newUri));
-        titleLabel.textProperty().bind(viewModel.title);
-        artistLabel.textProperty().bind(new SimpleStringProperty("Artist: ").concat(viewModel.artists));
-        creatorLabel.textProperty().bind(new SimpleStringProperty("Creators: ").concat(viewModel.creators));
-        viewModel.isSelectedToArchive.addListener((_, _, val) -> archiveIndicator.setOpacity(val ? 1.0 : 0.0));
+        this.bigPictureViewModel = viewModel;
 
         root.sceneProperty().addListener((_, _, scene) -> {
             if (scene != null) {
                 scene.windowProperty().addListener((_, _, window) -> {
                     if (window != null) {
-                        window.setOnHiding((_) -> this.viewModel.songsPlayer.stop());
+                        window.setOnHiding((_) -> this.bigPictureViewModel.songsPlayer.stop());
+                        window.setOnShowing((_) -> this.bigPictureViewModel.playBeatmap(beatmapSetViewModel.beatmapSet.get().id()));
                     }
-
                 });
             }
         });
+    }
+
+    public void bind(BeatmapSetViewModel viewModel) {
+        beatmapSetViewModel = viewModel;
+        viewModel.beatmapSet.subscribe(
+                newBeatmapSet -> {
+                    titleLabel.setText(newBeatmapSet.name());
+                    artistLabel.setText("Artist: " + newBeatmapSet.artists());
+                    creatorLabel.setText("Creators: " + newBeatmapSet.creators());
+                    archiveIndicator.setOpacity(newBeatmapSet.archive() ? 1.0 : 0.0);
+                }
+        );
+        viewModel.activeBeatmap.addListener((_, oldBeatMap, newBeatMap) -> {
+            if (oldBeatMap == null || !oldBeatMap.beatmapImgUrl().equals(newBeatMap.beatmapImgUrl())) {
+                // TODO: fix beatmap tab pane bug
+//                System.out.println(oldBeatMap);
+//                System.out.println(newBeatMap);
+//                System.out.println("---------------------------");
+                changeBackground(newBeatMap.beatmapImgUrl());
+            }
+        });
+
     }
 
     private void changeBackground(String backgroundUri) {
@@ -89,19 +106,21 @@ public class BigPictureView implements Initializable {
     @FXML
     private void onKeyReleased(KeyEvent event) {
         switch (event.getCode()) {
-            case LEFT -> viewModel.previousBeatmapSet();
-            case RIGHT -> viewModel.nextBeatmapSet();
-            case A -> viewModel.toggleArchiveSelectionForBeatmapSet(viewModel.currentBeatmapSetId.get());
+            case LEFT -> onPreviousButtonAction();
+            case RIGHT -> onNextButtonAction();
+            case A -> beatmapSetViewModel.toggleArchiveSelectionForBeatmapSet();
         }
     }
 
     @FXML
     private void onNextButtonAction() {
-        viewModel.nextBeatmapSet();
+        beatmapSetViewModel.nextBeatmapSet();
+        this.bigPictureViewModel.playBeatmap(beatmapSetViewModel.beatmapSet.get().id());
     }
 
     @FXML
     private void onPreviousButtonAction() {
-        viewModel.previousBeatmapSet();
+        beatmapSetViewModel.previousBeatmapSet();
+        this.bigPictureViewModel.playBeatmap(beatmapSetViewModel.beatmapSet.get().id());
     }
 }
