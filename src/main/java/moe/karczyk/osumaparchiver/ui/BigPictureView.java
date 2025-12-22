@@ -33,7 +33,7 @@ public class BigPictureView implements Initializable {
     @FXML
     private Label creatorLabel;
     @FXML
-    private Button nextButton, previusButton;
+    private Button nextButton, previousButton;
     @FXML
     private Region bg1, bg2;
     @FXML
@@ -85,6 +85,8 @@ public class BigPictureView implements Initializable {
                     artistLabel.setText("Artist: " + newBeatmapSet.artists());
                     creatorLabel.setText("Creators: " + newBeatmapSet.creators());
                     archiveIndicator.setOpacity(newBeatmapSet.archive() ? 1.0 : 0.0);
+                    nextButton.setDisable(!newBeatmapSet.hasNext());
+                    previousButton.setDisable(!newBeatmapSet.hasPrevious());
                 }
         );
         viewModel.activeBeatmap.addListener((_, oldBeatMap, newBeatMap) -> {
@@ -114,13 +116,15 @@ public class BigPictureView implements Initializable {
 
     @FXML
     private void onNextButtonAction() {
-        beatmapSetViewModel.nextBeatmapSet();
-        this.bigPictureViewModel.playBeatmap(beatmapSetViewModel.beatmapSet.get().id());
+        if (beatmapSetViewModel.nextBeatmapSet()) {
+            this.bigPictureViewModel.playBeatmap(beatmapSetViewModel.beatmapSet.get().id());
+        }
     }
 
     @FXML
     private void onPreviousButtonAction() {
-        beatmapSetViewModel.previousBeatmapSet();
-        this.bigPictureViewModel.playBeatmap(beatmapSetViewModel.beatmapSet.get().id());
+        if (beatmapSetViewModel.previousBeatmapSet()) {
+            this.bigPictureViewModel.playBeatmap(beatmapSetViewModel.beatmapSet.get().id());
+        }
     }
 }

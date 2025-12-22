@@ -35,6 +35,8 @@ public class BeatmapSetViewModel {
         activeBeatmap.set(availableBeatmaps.getFirst());
         var artists = String.join(", ", beatmapSet.getArtists());
         var creators = String.join(", ", beatmapSet.getCreators());
+        var nextId = beatmapSetService.findNext(beatmapSetId).map(BeatmapSet::getId).orElse(null);
+        var previousId = beatmapSetService.findPrevious(beatmapSetId).map(BeatmapSet::getId).orElse(null);
 
         this.beatmapSet.set(BeatmapSetPresent.builder()
                 .id(beatmapSetId)
@@ -43,6 +45,8 @@ public class BeatmapSetViewModel {
                 .artists(artists)
                 .creators(creators)
                 .archive(beatmapSet.isSelectedToArchive())
+                .nextId(nextId)
+                .previousId(previousId)
                 .build()
         );
 
@@ -83,12 +87,21 @@ public class BeatmapSetViewModel {
         changeBeatmapSet(beatmapSetVal.id());
     }
 
-    //TODO: boundary check
-    public void nextBeatmapSet() {
-        changeBeatmapSet(beatmapSet.get().id() + 1);
+    public boolean nextBeatmapSet() {
+        var beatmapSet = this.beatmapSet.get();
+        if (beatmapSet.hasNext()) {
+            changeBeatmapSet(beatmapSet.nextId());
+            return true;
+        }
+        return false;
     }
 
-    public void previousBeatmapSet() {
-        changeBeatmapSet(beatmapSet.get().id() - 1);
+    public boolean previousBeatmapSet() {
+        var beatmapSet = this.beatmapSet.get();
+        if (beatmapSet.hasPrevious()) {
+            changeBeatmapSet(beatmapSet.previousId());
+            return true;
+        }
+        return false;
     }
 }

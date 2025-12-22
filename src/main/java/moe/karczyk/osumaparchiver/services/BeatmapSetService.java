@@ -79,4 +79,12 @@ public class BeatmapSetService {
         var beatmapSet = findBeatmapSetWithId(beatmapSetId).orElseThrow();
         changeArchiveSelectionStatus(List.of(beatmapSetId), !beatmapSet.isSelectedToArchive());
     }
+
+    public Optional<BeatmapSet> findNext(long beatmapSet) {
+        return beatmapSetRepository.findFirstByIdAfterOrderByIdAsc(beatmapSet);
+    }
+
+    public Optional<BeatmapSet> findPrevious(long beatmapSet) {
+        return beatmapSetRepository.findFirstByIdBeforeOrderByIdDesc(beatmapSet);
+    }
 }
