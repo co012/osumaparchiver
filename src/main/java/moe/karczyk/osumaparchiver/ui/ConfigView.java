@@ -2,7 +2,6 @@ package moe.karczyk.osumaparchiver.ui;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,7 +13,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import moe.karczyk.osumaparchiver.BeatmapSetViewModel;
 import moe.karczyk.osumaparchiver.ConfigViewModel;
-import moe.karczyk.osumaparchiver.ui.models.BeatmapPresent;
 import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
 
 import java.io.IOException;
@@ -121,15 +119,12 @@ public class ConfigView implements Initializable {
                         }
                 );
 
-        beatmapSetViewModel.availableBeatmaps.addListener((ListChangeListener<BeatmapPresent>) c -> {
-            while (c.next()) {
-                if (c.wasRemoved()) {
-                    beatmapTabPane.getTabs().clear();
-                    c.getList().forEach(beatmap -> beatmapTabPane.getTabs().add(new Tab(beatmap.version())));
-                } else if (c.wasAdded()) {
-                    c.getAddedSubList().forEach(beatmap -> beatmapTabPane.getTabs().add(new Tab(beatmap.version())));
-                }
-            }
+        beatmapSetViewModel.availableBeatmaps.subscribe(beatmaps -> {
+            var newTabs = beatmaps
+                    .stream()
+                    .map(b -> new Tab(b.version()))
+                    .toList();
+            beatmapTabPane.getTabs().setAll(newTabs);
         });
         beatmapSetViewModel.activeBeatmap.subscribe(beatmap -> {
             title.setText("Title: " + beatmap.title());

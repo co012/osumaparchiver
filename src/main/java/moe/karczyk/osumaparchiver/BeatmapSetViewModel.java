@@ -2,8 +2,6 @@ package moe.karczyk.osumaparchiver;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lombok.RequiredArgsConstructor;
 import moe.karczyk.osumaparchiver.models.BeatmapSet;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
@@ -13,6 +11,7 @@ import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -22,17 +21,16 @@ public class BeatmapSetViewModel {
     private final BeatmapSetService beatmapSetService;
     private final UrlEncodingService urlEncodingService;
 
-    public final ObservableList<BeatmapPresent> availableBeatmaps = FXCollections.observableArrayList();
+    public final ObjectProperty<List<BeatmapPresent>> availableBeatmaps = new SimpleObjectProperty<>(List.of());
     public final ObjectProperty<BeatmapPresent> activeBeatmap = new SimpleObjectProperty<>(BeatmapPresent.EMPTY);
     public final ObjectProperty<BeatmapSetPresent> beatmapSet = new SimpleObjectProperty<>(BeatmapSetPresent.EMPTY);
 
     public void changeBeatmapSet(long beatmapSetId) {
-        availableBeatmaps.clear();
         var beatmapSet = beatmapSetService.findBeatmapSetWithId(beatmapSetId)
                 .orElseThrow();
 
         changeBeatmaps(beatmapSet);
-        activeBeatmap.set(availableBeatmaps.getFirst());
+        activeBeatmap.set(availableBeatmaps.get().stream().findFirst().orElse(BeatmapPresent.EMPTY));
         var artists = String.join(", ", beatmapSet.getArtists());
         var creators = String.join(", ", beatmapSet.getCreators());
         var nextId = beatmapSetService.findNext(beatmapSetId).map(BeatmapSet::getId).orElse(null);
@@ -54,7 +52,7 @@ public class BeatmapSetViewModel {
     }
 
     private void changeBeatmaps(final BeatmapSet beatmapSet) {
-        beatmapSet.getBeatmaps()
+        var newBeatmaps = beatmapSet.getBeatmaps()
                 .stream()
                 .map(map -> BeatmapPresent.builder()
                         .title(Objects.requireNonNullElse(map.getTitle(), BeatmapPresent.EMPTY.artist()))
@@ -70,15 +68,16 @@ public class BeatmapSetViewModel {
                                         urlEncodingService.encodePath(Path.of(beatmapSet.getFullDirectoryPath(), map.getBackgroundFilename()))
                         )
                         .build())
-                .forEach(availableBeatmaps::addLast);
+                .toList();
+        availableBeatmaps.set(newBeatmaps);
     }
 
     public void setActiveBeatmap(int availableBeatmapIdx) {
-        if (availableBeatmapIdx < 0 || availableBeatmapIdx > availableBeatmaps.size()) {
+        if (availableBeatmapIdx < 0 || availableBeatmapIdx > availableBeatmaps.get().size()) {
             activeBeatmap.set(BeatmapPresent.EMPTY);
             return;
         }
-        activeBeatmap.set(availableBeatmaps.get(availableBeatmapIdx));
+        activeBeatmap.set(availableBeatmaps.get().get(availableBeatmapIdx));
     }
 
     public void toggleArchiveSelectionForBeatmapSet() {

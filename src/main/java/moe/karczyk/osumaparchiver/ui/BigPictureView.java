@@ -91,10 +91,6 @@ public class BigPictureView implements Initializable {
         );
         viewModel.activeBeatmap.addListener((_, oldBeatMap, newBeatMap) -> {
             if (oldBeatMap == null || !oldBeatMap.beatmapImgUrl().equals(newBeatMap.beatmapImgUrl())) {
-                // TODO: fix beatmap tab pane bug
-//                System.out.println(oldBeatMap);
-//                System.out.println(newBeatMap);
-//                System.out.println("---------------------------");
                 changeBackground(newBeatMap.beatmapImgUrl());
             }
         });
