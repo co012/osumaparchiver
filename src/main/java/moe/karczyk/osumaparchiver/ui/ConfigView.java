@@ -53,6 +53,18 @@ public class ConfigView implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        root.sceneProperty().subscribe(scene -> {
+            if (scene == null) return;
+            scene.windowProperty().subscribe(window -> {
+                if (window == null) return;
+                window.focusedProperty().subscribe(isFocus -> {
+                    if (isFocus) {
+                        refresh();
+                    }
+                });
+            });
+        });
+
         rowsCountBox.getItems().addAll(10, 20, 30, 40, 50, 60);
         rowsCountBox.setValue(40);
         rowsCountBox.valueProperty().addListener(
