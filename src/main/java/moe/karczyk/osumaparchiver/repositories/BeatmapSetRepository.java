@@ -20,4 +20,6 @@ public interface BeatmapSetRepository extends JpaRepository<BeatmapSet, Long> {
 
     Optional<BeatmapSet> findFirstByIdBeforeOrderByIdDesc(long idAfter);
 
+    long countBySelectedToArchive(boolean selectedToArchive);
+
 }

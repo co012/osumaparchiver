@@ -1,8 +1,8 @@
 package moe.karczyk.osumaparchiver.services;
 
 import lombok.RequiredArgsConstructor;
-import moe.karczyk.osumaparchiver.repositories.BeatmapRepository;
 import moe.karczyk.osumaparchiver.models.Beatmap;
+import moe.karczyk.osumaparchiver.repositories.BeatmapRepository;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -84,6 +84,10 @@ public class BeatmapService {
             case "version" -> beatmapBuilder.version(keyValue[1].trim());
 
         }
+    }
+
+    public long getBeatmapCount() {
+        return beatmapRepository.count();
     }
 
 }

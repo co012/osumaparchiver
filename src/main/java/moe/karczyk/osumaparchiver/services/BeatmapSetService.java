@@ -87,4 +87,12 @@ public class BeatmapSetService {
     public Optional<BeatmapSet> findPrevious(long beatmapSet) {
         return beatmapSetRepository.findFirstByIdBeforeOrderByIdDesc(beatmapSet);
     }
+
+    public long getBeatmapSetCount() {
+        return beatmapSetRepository.count();
+    }
+
+    public long getToArchiveBeatmapSetCount() {
+        return beatmapSetRepository.countBySelectedToArchive(true);
+    }
 }

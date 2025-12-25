@@ -1,10 +1,13 @@
 package moe.karczyk.osumaparchiver;
 
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.RequiredArgsConstructor;
 import moe.karczyk.osumaparchiver.eventpassing.Event;
 import moe.karczyk.osumaparchiver.eventpassing.Producer;
+import moe.karczyk.osumaparchiver.services.BeatmapService;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
 import org.springframework.stereotype.Component;
@@ -17,9 +20,13 @@ import java.util.List;
 public class ConfigViewModel {
 
     private final BeatmapSetService beatmapSetService;
+    private final BeatmapService beatmapService;
     private final Producer producer;
 
     public final ObservableList<BeatmapSetPresent> visibleBeatmapSets = FXCollections.observableArrayList();
+    public final LongProperty beatmapSetCount = new SimpleLongProperty(0);
+    public final LongProperty toArchiveBeatmapSetCount = new SimpleLongProperty(0);
+    public final LongProperty beatmapCount = new SimpleLongProperty(0);
 
 
     public int getPageCount(int pageSize) {
@@ -48,6 +55,13 @@ public class ConfigViewModel {
                 .map(BeatmapSetPresent::id)
                 .toList();
         beatmapSetService.changeArchiveSelectionStatus(selectedIds, archive);
+        refreshCounts();
+    }
+
+    public void refreshCounts() {
+        beatmapCount.set(beatmapService.getBeatmapCount());
+        toArchiveBeatmapSetCount.set(beatmapSetService.getToArchiveBeatmapSetCount());
+        beatmapSetCount.set(beatmapSetService.getBeatmapSetCount());
     }
 
 

@@ -6,7 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<BorderPane fx:id="root" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25"
+<BorderPane fx:id="root" prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.karczyk.osumaparchiver.ui.ConfigView">
     <bottom>
         <Pagination fx:id="pagination" prefWidth="200.0" BorderPane.alignment="CENTER"/>
@@ -86,5 +86,29 @@
             </children>
         </VBox>
     </right>
+    <left>
+        <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="beatmapSetCount" text="Beatmap Sets: 999">
+                    <font>
+                        <Font size="17.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="beatmapCount" text="Beatmaps: 9999">
+                    <font>
+                        <Font size="17.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="toArchiveCount" text="To Archive: 19">
+                    <font>
+                        <Font size="17.0"/>
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="20.0"/>
+            </padding>
+        </VBox>
+    </left>
 
 </BorderPane>

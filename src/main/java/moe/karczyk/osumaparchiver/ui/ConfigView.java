@@ -28,28 +28,26 @@ public class ConfigView implements Initializable {
     @FXML
     public Parent root;
     @FXML
-    private Pagination pagination;
-    @FXML
     private ChoiceBox<Integer> rowsCountBox;
+
+    @FXML
+    private Pagination pagination;
     @FXML
     private TableView<BeatmapSetPresent> table;
     @FXML
-    private TableColumn<BeatmapSetPresent, String> nameCol;
-    @FXML
-    private TableColumn<BeatmapSetPresent, String> artistsCol;
-    @FXML
-    private TableColumn<BeatmapSetPresent, String> creatorsCol;
+    private TableColumn<BeatmapSetPresent, String> nameCol, artistsCol, creatorsCol, archiveCol;
     @FXML
     private TableColumn<BeatmapSetPresent, Number> beatmapCountCol;
-    @FXML
-    private TableColumn<BeatmapSetPresent, String> archiveCol;
+
     @FXML
     private TabPane beatmapTabPane;
-
     @FXML
     private ImageView background;
     @FXML
     private Label title, titleOriginal, artist, artistOriginal, creator;
+
+    @FXML
+    private Label beatmapSetCount, beatmapCount, toArchiveCount;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -119,6 +117,9 @@ public class ConfigView implements Initializable {
     public void bind(ConfigViewModel configViewModel) {
         this.configViewModel = configViewModel;
         table.setItems(configViewModel.visibleBeatmapSets);
+        configViewModel.beatmapSetCount.subscribe(count -> beatmapSetCount.setText("Beatmap Sets: " + count));
+        configViewModel.toArchiveBeatmapSetCount.subscribe(count -> toArchiveCount.setText("To Archive: " + count));
+        configViewModel.beatmapCount.subscribe(count -> beatmapCount.setText("Beatmaps: " + count));
     }
 
     public void bind(BeatmapSetViewModel beatmapSetViewModel) {
@@ -157,6 +158,7 @@ public class ConfigView implements Initializable {
     private void refresh() {
         pagination.setPageCount(configViewModel.getPageCount(rowsCountBox.getValue()));
         onPageChange(pagination.getCurrentPageIndex());
+        configViewModel.refreshCounts();
     }
 
     private void changeRowsPerPageCount(int oldVal, int newVal) {
