@@ -106,11 +106,6 @@ public class ConfigView implements Initializable {
             throw new RuntimeException(e);
         }
         view = loader.getController();
-        view.root.sceneProperty().addListener((_, oldValue, newValue) -> {
-            if (oldValue != newValue) {
-                view.refresh();
-            }
-        });
         return view;
     }
 
