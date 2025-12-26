@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lombok.extern.apachecommons.CommonsLog;
 import moe.karczyk.osumaparchiver.BeatmapSetViewModel;
 import moe.karczyk.osumaparchiver.ConfigViewModel;
 import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
@@ -20,7 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
+@CommonsLog
 public class ConfigView implements Initializable {
     private ConfigViewModel configViewModel;
     private BeatmapSetViewModel beatmapSetViewModel;
@@ -151,6 +152,7 @@ public class ConfigView implements Initializable {
     }
 
     private void refresh() {
+        log.trace("Refresh");
         pagination.setPageCount(configViewModel.getPageCount(rowsCountBox.getValue()));
         onPageChange(pagination.getCurrentPageIndex());
         configViewModel.refreshCounts();
