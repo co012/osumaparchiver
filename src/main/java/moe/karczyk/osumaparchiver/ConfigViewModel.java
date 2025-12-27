@@ -68,4 +68,8 @@ public class ConfigViewModel {
     public void openBigPictureOn() {
         producer.publish(Event.BIG_PICTURE_TARGET_SELECTED);
     }
+
+    public void openArchiveDialog() {
+        producer.publish(Event.ARCHIVE_TARGETS_FINALIZED);
+    }
 }

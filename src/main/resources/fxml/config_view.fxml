@@ -26,15 +26,18 @@
       </TableView>
    </center>
     <top>
-        <HBox alignment="CENTER_LEFT" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="50.0" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Rows: "/>
-                <ChoiceBox fx:id="rowsCountBox" prefWidth="150.0"/>
+                <Label layoutX="14.0" layoutY="17.0" text="Rows: "/>
+                <ChoiceBox fx:id="rowsCountBox" layoutX="48.0" layoutY="13.0" prefWidth="150.0"
+                           AnchorPane.leftAnchor="48.0"/>
+                <Button fx:id="archiveButton" layoutX="1405.0" layoutY="13.0" mnemonicParsing="false"
+                        onAction="#onArchiveAction" text="Archive" AnchorPane.rightAnchor="14.0"/>
             </children>
             <padding>
-                <Insets bottom="10.0" left="10.0" top="10.0"/>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
-        </HBox>
+        </AnchorPane>
     </top>
     <right>
         <VBox maxWidth="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">

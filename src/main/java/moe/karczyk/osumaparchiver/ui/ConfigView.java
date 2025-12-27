@@ -30,6 +30,8 @@ public class ConfigView implements Initializable {
     public Parent root;
     @FXML
     private ChoiceBox<Integer> rowsCountBox;
+    @FXML
+    private Button archiveButton;
 
     @FXML
     private Pagination pagination;
@@ -49,6 +51,7 @@ public class ConfigView implements Initializable {
 
     @FXML
     private Label beatmapSetCount, beatmapCount, toArchiveCount;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -116,6 +119,7 @@ public class ConfigView implements Initializable {
         configViewModel.beatmapSetCount.subscribe(count -> beatmapSetCount.setText("Beatmap Sets: " + count));
         configViewModel.toArchiveBeatmapSetCount.subscribe(count -> toArchiveCount.setText("To Archive: " + count));
         configViewModel.beatmapCount.subscribe(count -> beatmapCount.setText("Beatmaps: " + count));
+        archiveButton.disableProperty().bind(configViewModel.toArchiveBeatmapSetCount.lessThanOrEqualTo(0));
     }
 
     public void bind(BeatmapSetViewModel beatmapSetViewModel) {
@@ -182,6 +186,11 @@ public class ConfigView implements Initializable {
             configViewModel.openBigPictureOn();
         }
 
+    }
+
+    @FXML
+    private void onArchiveAction() {
+        configViewModel.openArchiveDialog();
     }
 
 

@@ -1,7 +1,9 @@
-package moe.karczyk.osumaparchiver.ui;
+package moe.karczyk.osumaparchiver.ui.managers;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.stage.Stage;
@@ -10,12 +12,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import moe.karczyk.osumaparchiver.eventpassing.Consumer;
 import moe.karczyk.osumaparchiver.eventpassing.Event;
+import moe.karczyk.osumaparchiver.ui.BigPictureView;
+import moe.karczyk.osumaparchiver.ui.ConfigView;
+import moe.karczyk.osumaparchiver.ui.DirectorySelectionView;
 
 @RequiredArgsConstructor
 @CommonsLog
 public class StageManager implements Consumer {
 
     private final Stage bigPictureStage = new Stage(StageStyle.UNDECORATED);
+    private final Dialog<Void> archiveDialog = new Dialog<>();
 
     private final Stage mainStage;
     private final DirectorySelectionView directorySelectionView;
@@ -34,6 +40,8 @@ public class StageManager implements Consumer {
     private void setup() {
         bigPictureStage.setScene(new Scene(bigPictureView.root));
         bigPictureStage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.ESCAPE), bigPictureStage::hide);
+
+        archiveDialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.APPLY);
     }
 
     public void run() {
@@ -45,6 +53,7 @@ public class StageManager implements Consumer {
             switch (event) {
                 case SONGS_LOADED -> showConfigScene();
                 case BIG_PICTURE_TARGET_SELECTED -> openBigPicture();
+                case ARCHIVE_TARGETS_FINALIZED -> showArchiveDialog();
             }
     }
 
@@ -64,6 +73,10 @@ public class StageManager implements Consumer {
     private void openBigPicture() {
         bigPictureStage.setFullScreen(true);
         bigPictureStage.show();
+    }
+
+    private void showArchiveDialog() {
+        archiveDialog.showAndWait();
     }
 
 }

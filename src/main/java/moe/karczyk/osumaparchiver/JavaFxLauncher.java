@@ -6,7 +6,7 @@ import moe.karczyk.osumaparchiver.eventpassing.Producer;
 import moe.karczyk.osumaparchiver.ui.BigPictureView;
 import moe.karczyk.osumaparchiver.ui.ConfigView;
 import moe.karczyk.osumaparchiver.ui.DirectorySelectionView;
-import moe.karczyk.osumaparchiver.ui.StageManager;
+import moe.karczyk.osumaparchiver.ui.managers.StageManager;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
