@@ -2,7 +2,6 @@ package moe.karczyk.osumaparchiver.ui.managers;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import moe.karczyk.osumaparchiver.eventpassing.Consumer;
 import moe.karczyk.osumaparchiver.eventpassing.Event;
+import moe.karczyk.osumaparchiver.ui.ArchiveView;
 import moe.karczyk.osumaparchiver.ui.BigPictureView;
 import moe.karczyk.osumaparchiver.ui.ConfigView;
 import moe.karczyk.osumaparchiver.ui.DirectorySelectionView;
@@ -27,6 +27,7 @@ public class StageManager implements Consumer {
     private final DirectorySelectionView directorySelectionView;
     private final ConfigView configView;
     private final BigPictureView bigPictureView;
+    private final ArchiveView archiveView;
 
     @Override
     public void consume(Event event) {
@@ -41,7 +42,7 @@ public class StageManager implements Consumer {
         bigPictureStage.setScene(new Scene(bigPictureView.root));
         bigPictureStage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.ESCAPE), bigPictureStage::hide);
 
-        archiveDialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.APPLY);
+        archiveDialog.getDialogPane().setContent(archiveView.root);
     }
 
     public void run() {
