@@ -5,10 +5,10 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.RequiredArgsConstructor;
-import moe.karczyk.osumaparchiver.eventpassing.Event;
-import moe.karczyk.osumaparchiver.eventpassing.Producer;
 import moe.karczyk.osumaparchiver.services.BeatmapService;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
+import moe.karczyk.osumaparchiver.ui.UiCoordinator;
+import moe.karczyk.osumaparchiver.ui.UiCoordinatorAware;
 import moe.karczyk.osumaparchiver.ui.models.BeatmapSetPresent;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +17,12 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ConfigViewModel {
+public class ConfigViewModel implements UiCoordinatorAware {
+
+    private UiCoordinator uiCoordinator;
 
     private final BeatmapSetService beatmapSetService;
     private final BeatmapService beatmapService;
-    private final Producer producer;
 
     public final ObservableList<BeatmapSetPresent> visibleBeatmapSets = FXCollections.observableArrayList();
     public final LongProperty beatmapSetCount = new SimpleLongProperty(0);
@@ -66,10 +67,15 @@ public class ConfigViewModel {
 
 
     public void openBigPictureOn() {
-        producer.publish(Event.BIG_PICTURE_TARGET_SELECTED);
+        uiCoordinator.openBigPicture();
     }
 
-    public void openArchiveDialog() {
-        producer.publish(Event.ARCHIVE_TARGETS_FINALIZED);
+    public void requestArchiveAction() {
+        uiCoordinator.requestArchiveAction();
+    }
+
+    @Override
+    public void setUiCoordinator(UiCoordinator uiCoordinator) {
+        this.uiCoordinator = uiCoordinator;
     }
 }

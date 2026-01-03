@@ -2,12 +2,7 @@ package moe.karczyk.osumaparchiver;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import moe.karczyk.osumaparchiver.eventpassing.Producer;
-import moe.karczyk.osumaparchiver.ui.ArchiveView;
-import moe.karczyk.osumaparchiver.ui.BigPictureView;
-import moe.karczyk.osumaparchiver.ui.ConfigView;
-import moe.karczyk.osumaparchiver.ui.DirectorySelectionView;
-import moe.karczyk.osumaparchiver.ui.managers.StageManager;
+import moe.karczyk.osumaparchiver.ui.*;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -44,10 +39,11 @@ public class JavaFxLauncher extends Application {
         ArchiveViewModel archiveViewModel = applicationContext.getBean(ArchiveViewModel.class);
         archiveView.bind(archiveViewModel);
 
-        var stageManager = new StageManager(stage, dirSelectionView, configView, bigPictureView, archiveView);
-        var producer = applicationContext.getBean(Producer.class);
-        producer.addConsumer(stageManager);
-        stageManager.run();
+        var uiCoordinator = new UiCoordinator(stage, dirSelectionView, configView, bigPictureView, archiveView);
+        applicationContext.getBeansOfType(UiCoordinatorAware.class)
+                .values()
+                .forEach(bean -> bean.setUiCoordinator(uiCoordinator));
+        uiCoordinator.run();
 
     }
 

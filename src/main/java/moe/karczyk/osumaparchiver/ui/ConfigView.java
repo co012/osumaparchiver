@@ -190,7 +190,7 @@ public class ConfigView implements Initializable {
 
     @FXML
     private void onArchiveAction() {
-        configViewModel.openArchiveDialog();
+        configViewModel.requestArchiveAction();
     }
 
 

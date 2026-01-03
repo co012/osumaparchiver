@@ -48,6 +48,8 @@ public class ArchiveView {
 
     @FXML
     private void onArchiveAction() {
+        // TODO
+        archiveViewModel.onArchiveCompleted();
     }
 
 }

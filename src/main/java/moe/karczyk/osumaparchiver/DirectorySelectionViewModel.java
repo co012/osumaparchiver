@@ -5,10 +5,10 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
 import lombok.RequiredArgsConstructor;
-import moe.karczyk.osumaparchiver.eventpassing.Event;
-import moe.karczyk.osumaparchiver.eventpassing.Producer;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.services.OsuStuffValidationService;
+import moe.karczyk.osumaparchiver.ui.UiCoordinator;
+import moe.karczyk.osumaparchiver.ui.UiCoordinatorAware;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +19,12 @@ import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
-public class DirectorySelectionViewModel {
+public class DirectorySelectionViewModel implements UiCoordinatorAware {
+
+    private UiCoordinator uiCoordinator;
 
     private final OsuStuffValidationService osuStuffValidationService;
     private final BeatmapSetService beatmapSetService;
-    private final Producer producer;
 
     public final SimpleStringProperty songsDirPath = new  SimpleStringProperty();
     public final SimpleStringProperty infoText  = new  SimpleStringProperty();
@@ -87,7 +88,7 @@ public class DirectorySelectionViewModel {
         var loadingTask = createLoadingMapsTask(path);
         loadingProgress.bind(loadingTask.progressProperty());
         isLoadingMaps.bind(loadingTask.runningProperty());
-        loadingTask.setOnSucceeded(_ -> producer.publish(Event.SONGS_LOADED));
+        loadingTask.setOnSucceeded(_ -> uiCoordinator.notifyLoadCompleted(true));
         var loadingThread = new Thread(loadingTask);
         loadingThread.setDaemon(true);
         loadingThread.start();
@@ -104,7 +105,8 @@ public class DirectorySelectionViewModel {
     }
 
 
-
-
-
+    @Override
+    public void setUiCoordinator(UiCoordinator uiCoordinator) {
+        this.uiCoordinator = uiCoordinator;
+    }
 }
