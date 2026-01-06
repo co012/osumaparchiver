@@ -2,26 +2,39 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.*?>
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="427.0" prefWidth="353.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="427.0" prefWidth="359.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="moe.karczyk.osumaparchiver.ui.ArchiveView">
     <children>
         <Button fx:id="archiveButton" layoutX="151.0" layoutY="376.0" mnemonicParsing="false"
                 onAction="#onArchiveAction" text="Archive"/>
-        <HBox layoutX="55.0" layoutY="127.0">
+        <VBox layoutX="56.0" layoutY="58.0" AnchorPane.topAnchor="58.0">
             <children>
-                <TextField fx:id="pathTextField" onKeyReleased="#onPathFieldInput" prefHeight="25.0" prefWidth="187.0"/>
-                <Button mnemonicParsing="false" onAction="#onBrowseAction" text="Browse">
-                    <HBox.margin>
-                        <Insets left="5.0"/>
-                    </HBox.margin>
-                </Button>
+                <Label prefHeight="17.0" prefWidth="187.0" text="Archive file directory:"/>
+                <HBox>
+                    <children>
+                        <TextField fx:id="archiveDirPathField" onKeyReleased="#onDirPathInput" prefHeight="25.0"
+                                   prefWidth="187.0"/>
+                        <Button mnemonicParsing="false" onAction="#onBrowseAction" text="Browse">
+                            <HBox.margin>
+                                <Insets left="5.0"/>
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+                <Label fx:id="dirErrorLabel" prefHeight="17.0" prefWidth="247.0"/>
+                <Label prefHeight="17.0" prefWidth="187.0" text="Archive file name:">
+                    <VBox.margin>
+                        <Insets top="5.0"/>
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="archiveNameField" onKeyReleased="#onArchiveNameInput" prefHeight="25.0"
+                           prefWidth="187.0"/>
+                <Label fx:id="archiveNameError" prefHeight="17.0" prefWidth="187.0"/>
             </children>
-        </HBox>
-        <CheckBox fx:id="deleteAfterCheckBox" layoutX="78.0" layoutY="266.0" mnemonicParsing="false"
+        </VBox>
+        <CheckBox fx:id="deleteAfterCheckBox" layoutX="56.0" layoutY="190.0" mnemonicParsing="false"
                   text="Delete archived beatmap set files"/>
-        <Label fx:id="errorLabel" layoutX="56.0" layoutY="165.0" prefHeight="17.0" prefWidth="247.0"/>
     </children>
 </AnchorPane>
