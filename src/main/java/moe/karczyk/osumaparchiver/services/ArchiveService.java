@@ -18,7 +18,6 @@ public class ArchiveService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private void archivePath(Path path, ZipOutputStream zos) {

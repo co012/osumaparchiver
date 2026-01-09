@@ -5,6 +5,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -28,6 +29,8 @@ public class ArchiveView implements Initializable {
     private final DirectoryChooser directoryChooser = new DirectoryChooser();
 
     @FXML
+    private Group inputGroup;
+    @FXML
     private TextField archiveDirPathField, archiveNameField;
     @FXML
     private Label dirErrorLabel, archiveNameError;
@@ -35,6 +38,8 @@ public class ArchiveView implements Initializable {
     private CheckBox deleteAfterCheckBox;
     @FXML
     private Button archiveButton;
+    @FXML
+    private Parent archiveIndicatorContainer;
 
     public static ArchiveView load() {
         FXMLLoader loader = new FXMLLoader(ConfigView.class.getResource("/fxml/archive_view.fxml"));
@@ -77,6 +82,8 @@ public class ArchiveView implements Initializable {
                 .and(viewModel.archiveDirPath.isEmpty())
                 .not()
         );
+        archiveIndicatorContainer.visibleProperty().bind(archiveViewModel.isArchiving);
+        inputGroup.disableProperty().bind(archiveViewModel.isArchiving);
     }
 
     @FXML
@@ -91,7 +98,6 @@ public class ArchiveView implements Initializable {
 
     @FXML
     private void onArchiveAction() {
-        // TODO
         archiveViewModel.archiveMarkedBeatmapSets();
     }
 

@@ -5,12 +5,14 @@ import lombok.extern.apachecommons.CommonsLog;
 import moe.karczyk.osumaparchiver.models.BeatmapSet;
 import moe.karczyk.osumaparchiver.repositories.BeatmapSetRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -89,16 +91,29 @@ public class BeatmapSetService {
         return beatmapSetRepository.findFirstByIdBeforeOrderByIdDesc(beatmapSet);
     }
 
-    public void createArchiveFromMarkedBeatmapSets(Path archivePath) {
+    @Async
+    public CompletableFuture<Void> createArchiveFromMarkedBeatmapSets(Path archivePath) {
         var paths = beatmapSetRepository.findAllBySelectedToArchive(true)
                 .stream()
                 .map(BeatmapSet::getFullDirectoryPath)
                 .map(Path::of)
                 .toList();
         archiveService.archiveFiles(paths, archivePath);
+        return CompletableFuture.completedFuture(null);
     }
 
-    public void removeArchiveMarkedBeatmapSets() {
+    @Async
+    @Transactional
+    public CompletableFuture<Void> createArchiveFromAndRemoveMarkedBeatmapSets(Path archivePath) {
+        var paths = beatmapSetRepository.findAllBySelectedToArchive(true)
+                .stream()
+                .map(BeatmapSet::getFullDirectoryPath)
+                .map(Path::of)
+                .toList();
+        archiveService.archiveFiles(paths, archivePath);
+        fileAccessService.deleteDirectories(paths);
+        beatmapSetRepository.deleteBeatmapSetsBySelectedToArchive(true);
+        return CompletableFuture.completedFuture(null);
     }
 
     public long getBeatmapSetCount() {

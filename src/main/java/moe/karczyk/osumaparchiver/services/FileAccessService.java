@@ -1,7 +1,9 @@
 package moe.karczyk.osumaparchiver.services;
 
 
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Service
+@CommonsLog
 public class FileAccessService {
 
     public List<Path> getDirectoriesInDirectory(Path path) {
@@ -47,6 +50,16 @@ public class FileAccessService {
             return Files.lines(path, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteDirectories(List<Path> paths) {
+        for (var path : paths) {
+            try {
+                FileSystemUtils.deleteRecursively(path);
+            } catch (IOException e) {
+                log.error(e);
+            }
         }
     }
 }

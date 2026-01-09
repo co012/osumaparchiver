@@ -18,6 +18,8 @@ public interface BeatmapSetRepository extends JpaRepository<BeatmapSet, Long> {
 
     List<BeatmapSet> findAllBySelectedToArchive(boolean selectedToArchive);
 
+    void deleteBeatmapSetsBySelectedToArchive(boolean selectedToArchive);
+
     Optional<BeatmapSet> findFirstByIdAfterOrderByIdAsc(long idAfter);
 
     Optional<BeatmapSet> findFirstByIdBeforeOrderByIdDesc(long idAfter);

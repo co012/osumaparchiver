@@ -1,8 +1,10 @@
 package moe.karczyk.osumaparchiver;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.apachecommons.CommonsLog;
 import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.services.PathValidationService;
 import moe.karczyk.osumaparchiver.ui.UiCoordinator;
@@ -13,8 +15,10 @@ import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.CompletableFuture;
 
 @Service
+@CommonsLog
 @RequiredArgsConstructor
 public class ArchiveViewModel implements UiCoordinatorAware {
 
@@ -29,6 +33,7 @@ public class ArchiveViewModel implements UiCoordinatorAware {
     public final SimpleStringProperty archiveNameErrorMsg = new SimpleStringProperty("");
     public final SimpleStringProperty archivePathErrorMsg = new SimpleStringProperty("");
     public final SimpleBooleanProperty deleteArchivedFiles = new SimpleBooleanProperty(false);
+    public final SimpleBooleanProperty isArchiving = new SimpleBooleanProperty(false);
 
     @Override
     public void setUiCoordinator(UiCoordinator uiCoordinator) {
@@ -62,11 +67,23 @@ public class ArchiveViewModel implements UiCoordinatorAware {
     }
 
     public void archiveMarkedBeatmapSets() {
-        beatmapSetService.createArchiveFromMarkedBeatmapSets(Path.of(archiveDirPath.get(), archiveName.get()));
+        if (isArchiving.get()) return;
+        isArchiving.set(true);
+        var archivePath = Path.of(archiveDirPath.get(), archiveName.get());
+        CompletableFuture<Void> archiveFuture;
         if (deleteArchivedFiles.get()) {
-            beatmapSetService.removeArchiveMarkedBeatmapSets();
+            archiveFuture = beatmapSetService.createArchiveFromAndRemoveMarkedBeatmapSets(archivePath);
+        } else {
+            archiveFuture = beatmapSetService.createArchiveFromMarkedBeatmapSets(archivePath);
         }
+
+        archiveFuture.thenRun(() -> Platform.runLater(this::onArchiveCompleted));
+    }
+
+
+    private void onArchiveCompleted() {
         uiCoordinator.notifyArchiveCompleted();
+        isArchiving.set(false);
     }
 
     public void refresh() {
