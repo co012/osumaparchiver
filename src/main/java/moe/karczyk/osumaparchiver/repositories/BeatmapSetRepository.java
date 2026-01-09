@@ -16,6 +16,8 @@ public interface BeatmapSetRepository extends JpaRepository<BeatmapSet, Long> {
     @Query("update BeatmapSet map set map.selectedToArchive = :archive where map.id in :ids")
     void updateArchiveSelectionStatus(List<Long> ids, boolean archive);
 
+    List<BeatmapSet> findAllBySelectedToArchive(boolean selectedToArchive);
+
     Optional<BeatmapSet> findFirstByIdAfterOrderByIdAsc(long idAfter);
 
     Optional<BeatmapSet> findFirstByIdBeforeOrderByIdDesc(long idAfter);

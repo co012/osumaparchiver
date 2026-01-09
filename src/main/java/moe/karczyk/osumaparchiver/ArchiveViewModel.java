@@ -3,6 +3,7 @@ package moe.karczyk.osumaparchiver;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.RequiredArgsConstructor;
+import moe.karczyk.osumaparchiver.services.BeatmapSetService;
 import moe.karczyk.osumaparchiver.services.PathValidationService;
 import moe.karczyk.osumaparchiver.ui.UiCoordinator;
 import moe.karczyk.osumaparchiver.ui.UiCoordinatorAware;
@@ -20,6 +21,7 @@ public class ArchiveViewModel implements UiCoordinatorAware {
     private UiCoordinator uiCoordinator;
 
     private final PathValidationService pathValidationService;
+    private final BeatmapSetService beatmapSetService;
 
     public final SimpleStringProperty archiveDirPath = new SimpleStringProperty("");
     public final SimpleStringProperty archiveDirErrorMsg = new SimpleStringProperty("");
@@ -59,8 +61,11 @@ public class ArchiveViewModel implements UiCoordinatorAware {
         archivePathErrorMsg.set(result.msg());
     }
 
-    public void onArchiveCompleted() {
-        System.out.println(Path.of(archiveDirPath.get(), archiveName.get()).toAbsolutePath());
+    public void archiveMarkedBeatmapSets() {
+        beatmapSetService.createArchiveFromMarkedBeatmapSets(Path.of(archiveDirPath.get(), archiveName.get()));
+        if (deleteArchivedFiles.get()) {
+            beatmapSetService.removeArchiveMarkedBeatmapSets();
+        }
         uiCoordinator.notifyArchiveCompleted();
     }
 

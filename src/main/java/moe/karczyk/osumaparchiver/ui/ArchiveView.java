@@ -92,7 +92,7 @@ public class ArchiveView implements Initializable {
     @FXML
     private void onArchiveAction() {
         // TODO
-        archiveViewModel.onArchiveCompleted();
+        archiveViewModel.archiveMarkedBeatmapSets();
     }
 
     @FXML

@@ -20,6 +20,7 @@ public class BeatmapSetService {
     private final FileAccessService fileAccessService;
     private final BeatmapService beatmapService;
     private final BeatmapSetRepository beatmapSetRepository;
+    private final ArchiveService archiveService;
 
     public interface ProgressCallback {
         void updateProgress(long processedDirs, long total);
@@ -86,6 +87,18 @@ public class BeatmapSetService {
 
     public Optional<BeatmapSet> findPrevious(long beatmapSet) {
         return beatmapSetRepository.findFirstByIdBeforeOrderByIdDesc(beatmapSet);
+    }
+
+    public void createArchiveFromMarkedBeatmapSets(Path archivePath) {
+        var paths = beatmapSetRepository.findAllBySelectedToArchive(true)
+                .stream()
+                .map(BeatmapSet::getFullDirectoryPath)
+                .map(Path::of)
+                .toList();
+        archiveService.archiveFiles(paths, archivePath);
+    }
+
+    public void removeArchiveMarkedBeatmapSets() {
     }
 
     public long getBeatmapSetCount() {
